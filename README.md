@@ -8,6 +8,28 @@ RX Gemini empowers developers, testers, and management to focus on features and 
 
 ## Installation
 
+### Build from source
+
+Please ensure you have [Python Poetry](https://python-poetry.org/) installed.
+
+Build with:
+
+`poetry build`
+
+This will generate a wheel in the `dist` directory.
+
+You can then install that wheel with pip:
+
+`pip install dist\rxgemini-0.1.1-py3-none-any.whl`
+
+Use `--force-reinstall` if the version in pyproject.toml has not been updated.
+
+If your python packages are not on PATH, then you may need to use `python -m rxgemini`.
+
+### Install from PyPI
+
+Coming soon, still a WIP :)
+
 ## Usage
 
 ## Roadmap
