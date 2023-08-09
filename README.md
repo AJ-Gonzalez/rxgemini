@@ -2,6 +2,8 @@
 
 Python unit test automation toolkit. Generate real-world faithful unit tests with zero overhead.
 
+RX Gemini empowers developers, testers, and management to focus on features and code quality.
+
 ## Current Features
 
 ## Installation
@@ -12,6 +14,8 @@ Python unit test automation toolkit. Generate real-world faithful unit tests wit
 
 - Smart Data Fetch
 - Smart Data Injection
+- Auto boilerplate
+- Auto test imports
 
 ## Contribute to RX Gemini
 
@@ -23,3 +27,10 @@ Here are the main project needs:
 - Documentation on usage and setup.
 - Feature requests.
 - A proper logo. (I have a couple ideas but cannot draw like that)
+
+For now I am the sole developer, however this will change in the future.
+
+## Notes
+
+The RX in the name is inspired by both the RX-78-2 Mobile Suit from Gundam, and the Mazda FC Rx7 sportscar.
+Gemini refers to the constellation and the NASA Program.

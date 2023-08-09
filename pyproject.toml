@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "rxgemini"
 version = "0.1.0"
-description = ""
-authors = ["Your Name <you@example.com>"]
+description = "Python unit test automation toolkit."
+authors = ["AJ-Gonzalez <aj.gonzalez.dev@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
