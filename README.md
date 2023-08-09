@@ -37,6 +37,12 @@ Pylint, flake8, and Black Formatter.
 
 All methods and fucntions must have docstrings.
 
+If there are any dependency changes please run:
+
+`poetry export --without-hashes --format=requirements.txt > requirements.txt`
+
+To update the requirements for github's pylint workflow.
+
 ### Commit message standards
 
 We use a prefix followed by a colon.
