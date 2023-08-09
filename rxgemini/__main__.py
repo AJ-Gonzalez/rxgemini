@@ -1,3 +1,5 @@
+"""Main entrypoint module for RX Gemini CLI"""
+
 import typer
 
 
@@ -17,3 +19,7 @@ def example():
     Sample Command
     """
     typer.echo("example")
+
+
+if __name__ == "__main__":
+    app()

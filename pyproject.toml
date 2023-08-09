@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "rxgemini"
-version = "0.1.0"
+version = "0.1.1"
 description = "Python unit test automation toolkit."
 authors = ["AJ-Gonzalez <aj.gonzalez.dev@gmail.com>"]
 readme = "README.md"
