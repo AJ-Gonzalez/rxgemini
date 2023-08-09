@@ -37,10 +37,33 @@ Pylint, flake8, and Black Formatter.
 
 All methods and fucntions must have docstrings.
 
+### Commit message standards
+
+We use a prefix followed by a colon.
+
+Example `feat: added smart scanner`
+
+| Prefix | Indicates                                   |
+|--------|---------------------------------------------|
+| feat   | Adding to a feature or adding functionality |
+| fix    | Bug fix or Hot Fix                          |
+| docs   | Changes to Documentation, or docstrings     |
+| fmt    | Formatting (no logic changed)               |
+| ref    | Refactor or rework                          |
+
+### Branch Naming Convention
+
+`main` is the release branch, at this time the rest of the branch conventions is still being decided.
+
 ## Notes
 
 The RX in the name is inspired by both the RX-78-2 Mobile Suit from Gundam, and the Mazda FC Rx7 sportscar.
 Gemini refers to the constellation and the NASA Program.
 
-Be kind.
-Raise hell, praise Dale.
+### Useful links
+
+- [Markdown Tables](https://www.tablesgenerator.com/markdown_tables#)
+
+- [Typer Documentation](https://typer.tiangolo.com/)
+
+- [Python Poetry Documentation](https://python-poetry.org/docs/)
