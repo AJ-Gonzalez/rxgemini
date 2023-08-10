@@ -26,6 +26,8 @@ Use `--force-reinstall` if the version in pyproject.toml has not been updated.
 
 If your python packages are not on PATH, then you may need to use `python -m rxgemini`.
 
+*To generate a requirements.txt please use:* `poetry export --without-hashes --format=requirements.txt > requirements.txt`
+
 ### Install from PyPI
 
 Coming soon, still a WIP :)
