@@ -3,6 +3,7 @@
 import typer
 
 from rxgemini import styles
+from rxgemini import configurator
 
 
 app = typer.Typer()
@@ -54,6 +55,7 @@ def generate_config():
     Configuration file Generator
     """
     typer.echo(styles.cyan_bold("WIP Placeholder for CFG generator"))
+    configurator.config_checker()
 
 
 @app.command()

@@ -4,7 +4,11 @@ Python unit test automation toolkit. Generate real-world faithful unit tests wit
 
 RX Gemini empowers developers, testers, and management to focus on features and code quality.
 
+Cross platform and adaptable.
+
 ## Current Features
+
+- Configuration generator
 
 ## Installation
 
