@@ -41,10 +41,13 @@ Coming soon, still a WIP :)
 ## Roadmap
 
 - Smart Data Fetch
+- Data Type validation
 - Smart Data Injection
 - Auto boilerplate
 - Auto test imports
 - Auto generate unit tests
+- Adjustable formality level for logs and feedback
+- Smart Docstring reader
 
 ## Contribute to RX Gemini
 
