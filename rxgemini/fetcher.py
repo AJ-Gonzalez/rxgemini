@@ -7,14 +7,13 @@ import sys
 
 import typer
 
-from rxgemini.configurator import config_loader, CFG_NAME
+from rxgemini.configurator import config_checker
 
-CONFIG=config_loader()
+CONFIG = config_checker(internal=True)
 
-# TODO: get from config
 
-MARKER_KW = "placeholder for config"
-TAGS = {"FETCHER": ["fetcher", "on", "off"]}
+MARKER_KW = CONFIG["MARKER_KW"]
+TAGS = CONFIG["TAGS"]
 
 
 class ScopeGetterException(Exception):
