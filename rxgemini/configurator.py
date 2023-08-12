@@ -40,7 +40,18 @@ def config_loader(filename: str) -> dict:
 
 
 def config_writer():
-    pass
+    """
+    Writes the default RX Gemini configuration file
+    upon user confirmation.
+    """
+    write = typer.confirm(styles.cyan_bold("Generate config file?"))
+    if write:
+        f_name: str = CFG_NAME[0]
+        typer.echo(styles.cyan_bold(f"Writing config file {f_name}"))
+        with open(f_name, "w", encoding="utf-8") as cfg:
+            yaml.dump(CFG_TEMPLATE, cfg)
+    else:
+        typer.echo(styles.yellow_bold("Operation cancelled by User."))
 
 
 def config_checker() -> bool:
@@ -50,7 +61,7 @@ def config_checker() -> bool:
     extension in the current working directory.
 
     """
-    typer.echo(styles.magenta_bold(f"{Path().cwd()}"))
+    typer.echo(styles.magenta_bold(f"Checking directory: {Path().cwd()}"))
     for f_name in CFG_NAME:
         # Instantiate the Path class
         obj = Path(f_name)

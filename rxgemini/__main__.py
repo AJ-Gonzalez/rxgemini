@@ -16,6 +16,7 @@ def callback():
     """
     RX Gemini:
 
+
     Python unit test automation toolkit.
     Generate real-world faithful unit tests with zero overhead.
 
@@ -61,7 +62,8 @@ def generate_config():
     if configurator.config_checker():
         sys.exit()
     else:
-        typer.echo("Placeholder for Config file creation")
+        typer.echo("Writing configuration...")
+        configurator.config_writer()
 
 
 @app.command()
