@@ -1,5 +1,7 @@
 """Main entrypoint module for RX Gemini CLI"""
 
+import sys
+
 import typer
 
 from rxgemini import styles
@@ -52,10 +54,14 @@ def about():
 @app.command()
 def generate_config():
     """
-    Configuration file Generator
+    Checks if there is a configuration file and generates one if there
+    is none
     """
-    typer.echo(styles.cyan_bold("WIP Placeholder for CFG generator"))
-    configurator.config_checker()
+    typer.echo(styles.cyan_bold("Checking for configuration file..."))
+    if configurator.config_checker():
+        sys.exit()
+    else:
+        typer.echo("Placeholder for Config file creation")
 
 
 @app.command()

@@ -43,13 +43,23 @@ def config_writer():
     pass
 
 
-def config_checker():
-    print(Path().cwd())
+def config_checker() -> bool:
+    """
+    Checks if there is a correctly formatted
+    configuration file with a valil yaml
+    extension in the current working directory.
+
+    """
+    typer.echo(styles.magenta_bold(f"{Path().cwd()}"))
     for f_name in CFG_NAME:
         # Instantiate the Path class
         obj = Path(f_name)
 
         # Check if path exists
-        msg = f"{obj.exists()} {f_name}"
-        typer.echo(styles.cyan_bold(msg))
-        fprint(config_loader(f_name))
+        if obj.exists():
+            msg = f"Found configuration file: {f_name}"
+            typer.echo(styles.green_bold(msg))
+            fprint(config_loader(f_name))
+            return True
+    typer.echo(styles.yellow_bold("No configuration file found"))
+    return False

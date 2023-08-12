@@ -55,6 +55,19 @@ def cyan_bold(text: str) -> str:
     return typer.style(text, fg=typer.colors.CYAN, bold=True)
 
 
+def magenta_bold(text: str) -> str:
+    """
+    Magenta bold text
+
+    Args:
+        text (str): input text to format
+
+    Returns:
+        str: formatted text
+    """
+    return typer.style(text, fg=typer.colors.MAGENTA, bold=True)
+
+
 if __name__ == "__main__":
     typer.echo(green_bold("example text here"))
     typer.echo(red_bold("more sample text"))
