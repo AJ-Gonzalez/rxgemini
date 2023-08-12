@@ -8,25 +8,13 @@ import sys
 import typer
 
 from rxgemini.configurator import config_checker
+from rxgemini.errors import ScopeGetterException
 
 CONFIG = config_checker(internal=True)
 
 
 MARKER_KW = CONFIG["MARKER_KW"]
 TAGS = CONFIG["TAGS"]
-
-
-class ScopeGetterException(Exception):
-    """
-    Custom exception for fetching stack trace.
-
-    Args:
-        Exception (class): Base Class for Exceptions
-    """
-
-    def __init__(self):
-        self.message = "Scope Getter"
-        super().__init__(self.message)
 
 
 def timestamp():
