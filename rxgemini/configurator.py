@@ -15,6 +15,7 @@ CFG_TEMPLATE: dict = {
     "METADATA_SUFFIX": "-meta",
     "MARKER_KW": "RXGEMINI",
     "TAGS": {"FETCHER": ["fetcher", "on", "off"]},
+    "DELIMITERS": ["_about_", "_regarding_", "_evaluates_"],
 }
 
 

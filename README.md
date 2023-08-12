@@ -48,6 +48,7 @@ Coming soon, still a WIP :)
 - Auto generate unit tests
 - Adjustable formality level for logs and feedback
 - Smart Docstring reader
+- auto minifier for builds/production
 
 ## Contribute to RX Gemini
 
