@@ -1,11 +1,13 @@
 """Configuration Handler module for RX Gemini"""
 from pathlib import Path
+from typing import Union
 
 import yaml
 import typer
 from rich import print as fprint
 
 from rxgemini import styles
+from rxgemini.errors import MissingConfigError
 
 
 CFG_NAME: tuple = ("rxgemini_cfg.yaml", "rxgemini_cfg.yml")
@@ -54,13 +56,28 @@ def config_writer():
         typer.echo(styles.yellow_bold("Operation cancelled by User."))
 
 
-def config_checker() -> bool:
+def config_checker(internal: bool = False) -> Union[bool, dict]:
     """
     Checks if there is a correctly formatted
     configuration file with a valil yaml
     extension in the current working directory.
 
+    In internal mode, it will return loaded config
+
+
+    Args:
+        internal (bool, optional): Internal mode. Defaults to False.
+
+    Returns:
+        bool: configuration file exists
+        dict: loaded config
     """
+    if internal:
+        for f_name in CFG_NAME:
+            checker = Path(f_name)
+            if checker.exists():
+                return config_loader(f_name)
+        raise MissingConfigError
     typer.echo(styles.magenta_bold(f"Checking directory: {Path().cwd()}"))
     for f_name in CFG_NAME:
         # Instantiate the Path class

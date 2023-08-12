@@ -7,7 +7,12 @@ import sys
 
 import typer
 
+from rxgemini.configurator import config_loader, CFG_NAME
+
+CONFIG=config_loader()
+
 # TODO: get from config
+
 MARKER_KW = "placeholder for config"
 TAGS = {"FETCHER": ["fetcher", "on", "off"]}
 
