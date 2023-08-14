@@ -4,6 +4,7 @@ import functools
 import inspect
 import pathlib
 import sys
+from datetime import datetime
 
 import typer
 
@@ -17,8 +18,17 @@ MARKER_KW = CONFIG["MARKER_KW"]
 TAGS = CONFIG["TAGS"]
 
 
-def timestamp():
-    pass
+def timestamp() -> tuple:
+    """
+    Provides formatted timestamps for metadata.
+
+    Returns:
+        tuple: Human readable, unix format
+    """
+    t_stamp = datetime.now()
+    human_readable: str = str(t_stamp).split(".")[0]
+    unix_readable: float = t_stamp.timestamp()
+    return (human_readable, unix_readable)
 
 
 def path_handler_for_tests(cwd: str):
@@ -29,6 +39,7 @@ def path_handler_for_tests(cwd: str):
 def cache_writer(path_str, obj_name, input_label, input_tuple):
     # (args, kwargs)
     pass
+    # needs refactoring and retooling to accept data
 
     # pickle binaries
     # metadata to json
