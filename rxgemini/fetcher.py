@@ -4,7 +4,9 @@ import functools
 import inspect
 import pathlib
 import sys
+import json
 from datetime import datetime
+from typing import Union, Optional
 
 import typer
 
@@ -36,9 +38,26 @@ def path_handler_for_tests(cwd: str):
     pass
 
 
-def cache_writer(path_str, obj_name, input_label, input_tuple):
+def cache_writer(
+    f_path: str,
+    obj_name: str,
+    role_label: str,
+    cache_data: Union[str, tuple],
+    meta_mode: Optional[bool] = False,
+):
     # (args, kwargs)
-    pass
+    if meta_mode:
+        # need to figure out how to do everything path related with pathlib
+        f_name = "dummy"
+        with open(f_name, "w", encoding="utf-8") as cache:
+            json.dump(cache_data, cache, indent=4)
+        return f_name
+    else:
+        f_name = "dummy"
+        with open(f_name, "wb") as cache:
+            pickle.dump(cache_data, cache)
+        return f_name
+
     # needs refactoring and retooling to accept data
 
     # pickle binaries
