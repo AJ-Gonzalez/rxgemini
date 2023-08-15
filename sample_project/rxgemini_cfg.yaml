@@ -1,0 +1,12 @@
+DELIMITERS:
+- _about_
+- _regarding_
+- _evaluates_
+FORMALITY: 0
+MARKER_KW: RXGEMINI
+METADATA_SUFFIX: -meta
+TAGS:
+  FETCHER:
+  - fetcher
+  - 'on'
+  - 'off'

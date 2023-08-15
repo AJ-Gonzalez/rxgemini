@@ -9,6 +9,7 @@ from datetime import datetime
 from typing import Union, Optional
 
 import typer
+from rich import print as pprint
 
 from rxgemini.configurator import config_checker
 from rxgemini.errors import ScopeGetterException
@@ -31,6 +32,37 @@ def timestamp() -> tuple:
     human_readable: str = str(t_stamp).split(".")[0]
     unix_readable: float = t_stamp.timestamp()
     return (human_readable, unix_readable)
+
+
+def check_if_enabled(src_file: str) -> bool:
+    """
+
+    Checks if the fetcher is enabled in python module
+    
+    With syntax: # MARKER_KW fetcher on/off
+
+    Args:
+        src_file (str): Absolute path to source file
+
+    Returns:
+        bool: Fetcher enabled or disabled.
+    """
+    with open(src_file, "r", encoding="utf-8") as runfile:
+        for line in runfile:
+            if line.startswith("#") and MARKER_KW in line:
+                line = line.replace(MARKER_KW, "")
+                line = line.replace("#", "")
+                line = line.strip()
+                if line.split(" ")[0] == TAGS["FETCHER"][0]:
+                    fetcher_setting = line.split(" ")[1]
+                    if fetcher_setting == TAGS["FETCHER"][1]:
+                        typer.echo("starting fetch")
+                        return True
+                    elif fetcher_setting == TAGS["FETCHER"][2]:
+                        typer.echo("skipping fetch")
+                        return False
+    typer.echo("No keyword found, skipping fetch by default")
+    return False
 
 
 def path_handler_for_tests(cwd: str):
@@ -65,10 +97,20 @@ def cache_writer(
 
 
 def data_fetcher(func: callable) -> callable:
-    @functools.wraps
+    @functools.wraps(func)
     def wrapper_fetcher(*args, **kwargs):
-        obj_name = func.__name__
         src_file = inspect.getfile(func)
+        if check_if_enabled(src_file):
+            obj_name = func.__name__
+            src_code = inspect.getsource(func)
+            pprint(src_code)
+            pprint(src_file, obj_name)
+            ret_value = func(*args, **kwargs)
+            return ret_value
+        else:
+            ret_value = func(*args, **kwargs)
+            return ret_value
+
         # refactor this as its own parser engine
         with open(src_file, "r", encoding="utf-8") as runfile:
             for line in runfile:
