@@ -6,9 +6,17 @@ from rxgemini.fetcher import data_fetcher
 
 
 @data_fetcher
-def add_numbers(num1, num2):
-    sum = num1 + num2
-    print("Sum: ", sum)
+def add_numbers(num1: int, num2: int):
+    """
+
+    Example function to showcase fetcher decorator usage
+
+    Args:
+        num1 (int): Number
+        num2 (int): Other number
+    """    
+    example_sum = num1 + num2
+    print("Sum: ", example_sum)
 
 
 if __name__ == "__main__":

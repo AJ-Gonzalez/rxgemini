@@ -29,7 +29,7 @@ def timestamp() -> tuple:
         tuple: Human readable, unix format
     """
     t_stamp = datetime.now()
-    human_readable: str = str(t_stamp).split(".")[0]
+    human_readable: str = str(t_stamp).split(".", maxsplit=1)[0]
     unix_readable: float = t_stamp.timestamp()
     return (human_readable, unix_readable)
 
@@ -38,7 +38,7 @@ def check_if_enabled(src_file: str) -> bool:
     """
 
     Checks if the fetcher is enabled in python module
-    
+
     With syntax: # MARKER_KW fetcher on/off
 
     Args:
