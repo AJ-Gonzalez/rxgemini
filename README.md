@@ -59,7 +59,7 @@ You will now genrerate a configuration file:
 
 Then press `y` to confirm.
 
-Yay! You have now set up RX Gemini for your project, you can read below on how to customize your configuration, or skip to to the [link](#using-rx-gemini)
+Yay! You have now set up RX Gemini for your project, you can read below on how to customize your configuration, or skip to the [Using RX Gemini](#using-rx-gemini) section below.
 
 ### Configuration
 
