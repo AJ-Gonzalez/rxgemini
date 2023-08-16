@@ -14,7 +14,7 @@ def add_numbers(num1: int, num2: int):
     Args:
         num1 (int): Number
         num2 (int): Other number
-    """    
+    """
     example_sum = num1 + num2
     print("Sum: ", example_sum)
 

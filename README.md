@@ -38,6 +38,37 @@ Coming soon, still a WIP :)
 
 ## Usage
 
+This section covers Setup, Configuration, and Using RX Gemini.
+
+### Setup
+
+First ensure RX Gemini is working as intented with:
+
+`rxgemini --help`
+
+If it is not in `PATH` you can also call it with `python -m` like so:
+
+`python -m rxgemini --help`
+
+Once you know it works you can navigate to your project directory.
+You will now genrerate a configuration file:
+
+`rxgemini generate config`
+
+Then press `y` to confirm.
+
+Yay! You ahve now set up RX Gemini for your project, you can read below on how to customize your configuration, or skip to to the [link](#using-rx-gemini)
+
+### Configuration
+
+### Using RX Gemini
+
+Data fetching.
+
+Data injection.
+
+Test Generation
+
 ## Roadmap
 
 - Smart Data Fetch
