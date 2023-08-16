@@ -5,6 +5,7 @@ import inspect
 import pathlib
 import sys
 import json
+import pickle
 from datetime import datetime
 from typing import Union, Optional
 
@@ -19,6 +20,7 @@ CONFIG = config_checker(internal=True)
 
 MARKER_KW = CONFIG["MARKER_KW"]
 TAGS = CONFIG["TAGS"]
+SAVE_DIR = CONFIG["SAVE_DIRECTORY"]
 
 
 def timestamp() -> tuple:
@@ -65,7 +67,7 @@ def check_if_enabled(src_file: str) -> bool:
     return False
 
 
-def path_handler_for_tests(cwd: str):
+def path_handler_for_tests():
     # make this windows and unix compatible
     pass
 

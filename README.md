@@ -103,11 +103,69 @@ Here is a handy table of what each field does and its datatype.
 
 ### Using RX Gemini
 
-Data fetching.
+#### Data fetching
 
-Data injection.
+To fetch data two things are needed:
 
-Test Generation.
+- Keyword Toggle for fetcher.
+- `@fetcher` decorator on the target function or method.
+
+The keyword is `RXGEMINI` by default, it needs to be placed in a comment, it can be anywhere in int python fil, however it is recommended you place it below the imports.
+
+Should look something like this:
+
+`# RXGEMINI fetcher on`
+
+The *keyword*denotes a toggle is present, then the `fetcher` tag references the fetcher decorator, next you have either `on` or `off`, depending on whether the fetcher should be active or inactive.
+
+The decorator is used like any other, right above the fucntion declaration.
+
+Here is an example:
+
+```python
+from rxgemini.fetcher import data_fetcher
+
+# RXGEMINI fetcher off
+
+
+@data_fetcher
+def add_numbers(num1: int, num2: int):
+    """
+
+    Example function to showcase fetcher decorator usage
+
+    Args:
+        num1 (int): Number
+        num2 (int): Other number
+    """
+    example_sum = num1 + num2
+    print("Sum: ", example_sum)
+
+
+if __name__ == "__main__":
+    print("RX Gemini showcase")
+    add_numbers(1, 2)
+
+```
+
+> **Please note that for the fetcher to work properly you script, module, project, or program must be called from the project's root directory**
+
+If your folder structure looks like this, you must call the module from `myproject` like `python3 src/main.py`.
+
+```shell
+my-project/
+  src/
+    └── main.py
+
+```
+
+#### Data injection
+
+WIP
+
+### Test Generation
+
+WIP
 
 ## Roadmap
 
