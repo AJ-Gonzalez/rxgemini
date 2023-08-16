@@ -57,9 +57,49 @@ You will now genrerate a configuration file:
 
 Then press `y` to confirm.
 
-Yay! You ahve now set up RX Gemini for your project, you can read below on how to customize your configuration, or skip to to the [link](#using-rx-gemini)
+Yay! You have now set up RX Gemini for your project, you can read below on how to customize your configuration, or skip to to the [link](#using-rx-gemini)
 
 ### Configuration
+
+Configuring RX Gemini is easy, below is an example of the default configuration file.
+
+```yaml
+DELIMITERS:
+- _about_
+- _regarding_
+- _evaluates_
+FORMALITY: 0
+INPUT_SUFFIX: -input
+LOG_PREFIX: '[RX_GEMINI]'
+MARKER_KW: RXGEMINI
+METADATA_SUFFIX: -meta
+OUTPUT_SUFFIX: -output
+SAVE_DIRECTORY: test_data_cache
+TAGS:
+  FETCHER:
+  - fetcher
+  - 'on'
+  - 'off'
+
+```
+
+Although you do not need to alter the default configuration for it to work, you can tailor things to your specific workflow.
+
+Here is a handy table of what each field does and its datatype.
+
+| Field:          | Content:                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | Type:                        | Example Value:                      |
+|-----------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------|-------------------------------------|
+| DELIMITERS      | Reserved words that separate a test method's name and its purpose. E.g. if your test method is named `test_my_fucntion` RX Gemini can  tell that `my function` is the one you are testing. However, if you  are using a more descriptive test method name, we use these delimiters  to be able to extract the function or method name. For example:  `test_my_function_regarding_error_handling` thanks to the delimiter we know we are still referring to `my_function`. | List of strings              | `["_about_", "_regarding_"]`        |
+| FORMALITY       | (Not yet implemented) Formality level of log messages                                                                                                                                                                                                                                                                                                                                                                                                                     | Integer                      | `0`                                 |
+| INPUT_SUFFIX    | Suffix for input related pickle files                                                                                                                                                                                                                                                                                                                                                                                                                                     | String                       | `"-input"`                          |
+| LOG_PREFIX      | (Not yet implemented) Prefix for log entries to denote the use of RX Gemini                                                                                                                                                                                                                                                                                                                                                                                               | String                       | `"[RX_GEMINI]"`                     |
+| MARKER_KW       | Keyword to denote an action toggle such as `fetcher on`                                                                                                                                                                                                                                                                                                                                                                                                                   | String                       | `"RXGEMINI"`                        |
+| METADATA_SUFFIX | Suffix for JSON metadata files                                                                                                                                                                                                                                                                                                                                                                                                                                            | String                       | `"-meta"`                           |
+| OUTPUT_SUFFIX   | Suffix for output related pickle files                                                                                                                                                                                                                                                                                                                                                                                                                                    | String                       | `"-output"`                         |
+| SAVE_DIRECTORY  | Name for data cache directory                                                                                                                                                                                                                                                                                                                                                                                                                                             | String                       | `"test_data"`                       |
+| TAGS            | Key Value pairs for action toggles.                                                                                                                                                                                                                                                                                                                                                                                                                                       | Key Value pair, (List Value) | `FETCHER: ["fetcher", "on", "off"]` |
+
+> *Please note that some configuration items do not yet affect functionality, or belong to features further ahead in the roadmap*
 
 ### Using RX Gemini
 
@@ -67,7 +107,7 @@ Data fetching.
 
 Data injection.
 
-Test Generation
+Test Generation.
 
 ## Roadmap
 
