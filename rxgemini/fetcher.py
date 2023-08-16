@@ -68,8 +68,11 @@ def check_if_enabled(src_file: str) -> bool:
 
 
 def path_handler_for_tests():
+    cwd = pathlib.Path().cwd()
+    test_save_path = pathlib.Path(cwd, "tests", SAVE_DIR)
+    typer.echo(test_save_path)
+
     # make this windows and unix compatible
-    pass
 
 
 def cache_writer(

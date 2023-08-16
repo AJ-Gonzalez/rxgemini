@@ -30,7 +30,9 @@ Use `--force-reinstall` if the version in pyproject.toml has not been updated.
 
 If your python packages are not on PATH, then you may need to use `python -m rxgemini`.
 
-*To generate a requirements.txt please use:* `poetry export --without-hashes --format=requirements.txt > requirements.txt`
+*To generate a requirements.txt please use:*
+
+`poetry export --without-hashes --format=requirements.txt > requirements.txt`
 
 ### Install from PyPI
 
@@ -102,6 +104,8 @@ Here is a handy table of what each field does and its datatype.
 > *Please note that some configuration items do not yet affect functionality, or belong to features further ahead in the roadmap*
 
 ### Using RX Gemini
+
+It is expected that your project will have a `tests` folder, if it does not exists it will be created.
 
 #### Data fetching
 
