@@ -1,0 +1,16 @@
+DELIMITERS:
+- _about_
+- _regarding_
+- _evaluates_
+FORMALITY: 0
+INPUT_SUFFIX: -input
+LOG_PREFIX: '[RX_GEMINI]'
+MARKER_KW: RXGEMINI
+METADATA_SUFFIX: -meta
+OUTPUT_SUFFIX: -output
+SAVE_DIRECTORY: test_data_cache
+TAGS:
+  FETCHER:
+  - fetcher
+  - 'on'
+  - 'off'
