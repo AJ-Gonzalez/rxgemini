@@ -21,8 +21,8 @@ CONFIG = config_checker(internal=True)
 MARKER_KW = CONFIG["MARKER_KW"]
 TAGS = CONFIG["TAGS"]
 SAVE_DIR = CONFIG["SAVE_DIRECTORY"]
-INPUT_LABEL = CONFIG["INPUT_SUFFIX"]
-OUTPUT_LABEL = CONFIG["OUTPUT_SUFFIX"]
+INPUT_LBL = CONFIG["INPUT_SUFFIX"]
+OUTPUT_LBL = CONFIG["OUTPUT_SUFFIX"]
 META_LABEL = CONFIG["METADATA_SUFFIX"]
 
 
@@ -81,7 +81,7 @@ def path_handler_for_tests(src_name: str) -> str:
     # make this windows and unix compatible
 
 
-def cache_writer(
+def write_cache(
     f_path: str,
     obj_name: str,
     role_label: str,
@@ -120,7 +120,7 @@ def data_fetcher(func: callable) -> callable:
             src_code = inspect.getsource(func)
             pprint(src_code)
             pprint(src_file, obj_name)
-            path_str = path_handler_for_tests(src_file)
+            f_path = path_handler_for_tests(src_file)
             caller_name = ""
             try:
                 raise ScopeGetterException
@@ -130,37 +130,35 @@ def data_fetcher(func: callable) -> callable:
                 typer.echo(expected)
 
             if "test_" in caller_name:
-                ret_value = func(*args, **kwargs)
+                ret_val = func(*args, **kwargs)
                 typer.echo("Skipping")
             else:
-                input_fname = cache_writer(
-                    path_str, obj_name, INPUT_LABEL, (args, kwargs)
-                )
-                typer.echo(input_fname)
-                ret_value = func(*args, **kwargs)
-                output_fname = cache_writer(
-                    path_str,
-                    obj_name,
-                    OUTPUT_LABEL,
-                    ret_value)
-                typer.echo(output_fname)
+                params: tuple = (args, kwargs)
+                input_fn = write_cache(f_path, obj_name, INPUT_LBL, params)
+                typer.echo(input_fn)
+                ret_val = func(*args, **kwargs)
+                output_fn = write_cache(f_path, obj_name, OUTPUT_LBL, ret_val)
+                typer.echo(output_fn)
                 ts_tup = timestamp()
-
+                in_types = {arg: type(arg) for arg in args}
+                out_types = {arg: type(arg) for arg in kwargs}
+                print(in_types, out_types)
+                print(inspect.signature(func))
                 metadata = {
                     "name": obj_name,
                     "timestamp_unix": ts_tup[1],
                     "timestamp_human": ts_tup[0],
                     "file": src_file,
-                    "docstring": inspect.getdoc(func)
+                    "docstring": inspect.getdoc(func),
                 }
 
-                meta_fname = cache_writer(
-                    path_str, obj_name, META_LABEL, metadata, meta_mode=True
+                meta_fname = write_cache(
+                    f_path, obj_name, META_LABEL, metadata, meta_mode=True
                 )
                 typer.echo(meta_fname)
-                return ret_value
+                return ret_val
         else:
-            ret_value = func(*args, **kwargs)
-            return ret_value
+            ret_val = func(*args, **kwargs)
+            return ret_val
 
     return wrapper_fetcher
