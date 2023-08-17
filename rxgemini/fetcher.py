@@ -26,6 +26,12 @@ OUTPUT_LBL = CONFIG["OUTPUT_SUFFIX"]
 META_LABEL = CONFIG["METADATA_SUFFIX"]
 
 
+def get_arg_vars(func: callable) -> dict:
+    print(inspect.signature(func))
+    arg_dict = {}
+    return arg_dict
+
+
 def timestamp() -> tuple:
     """
     Provides formatted timestamps for metadata.

@@ -1,0 +1,7 @@
+{
+    "name": "b_function",
+    "timestamp_unix": 1692306188.779355,
+    "timestamp_human": "2023-08-17 15:03:08",
+    "file": "c:\\Users\\Alicia Jadzia\\Documents\\rxgemini\\sample_project\\main.py",
+    "docstring": "Example fucntion with a return value\n\nArgs:\n    string (str): String of text\n\nReturns:\n    int: Length"
+}

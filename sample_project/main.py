@@ -33,7 +33,25 @@ def a_function(string: str) -> int:
     return len(string)
 
 
+@data_fetcher
+def b_function(string: str, sample_kwarg: bool = True) -> int:
+    """
+    Example fucntion with a return value
+
+    Args:
+        string (str): String of text
+
+    Returns:
+        int: Length
+    """
+    if sample_kwarg:
+        return len(string)
+    else:
+        return None
+
+
 if __name__ == "__main__":
     print("RX Gemini showcase")
     add_numbers(1, 2)
     a_function("Example string")
+    b_function("sample string again", sample_kwarg=False)
