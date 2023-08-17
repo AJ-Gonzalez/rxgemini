@@ -150,7 +150,8 @@ def data_fetcher(func: callable) -> callable:
                     "name": obj_name,
                     "timestamp_unix": ts_tup[1],
                     "timestamp_human": ts_tup[0],
-                    "": "",
+                    "file": src_file,
+                    "docstring": inspect.getdoc(func)
                 }
 
                 meta_fname = cache_writer(
