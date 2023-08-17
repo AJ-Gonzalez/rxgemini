@@ -75,7 +75,7 @@ def path_handler_for_tests(src_name: str) -> str:
     cwd = pathlib.Path().cwd()
     test_save_path = pathlib.Path(cwd, "tests", SAVE_DIR, file_name)
     typer.echo(test_save_path)
-    pathlib.Path(test_save_path).parents[0].mkdir(parents=True, exist_ok=True)
+    pathlib.Path(test_save_path).mkdir(parents=True, exist_ok=True)
     return test_save_path
 
     # make this windows and unix compatible
@@ -90,19 +90,20 @@ def cache_writer(
 ):
     if meta_mode:
         # need to figure out how to do everything path related with pathlib
-        f_name = f"{obj_name}{role_label}"
+        f_name = f"{obj_name}{role_label}.json"
         save_path = pathlib.Path(f_path, f_name)
+        typer.echo(f"{save_path} {pathlib.Path(save_path).exists()}")
         if not pathlib.Path(save_path).exists():
             with open(save_path, "w", encoding="utf-8") as cache:
                 json.dump(cache_data, cache, indent=4)
         return save_path
     else:
         t_stamp = str(timestamp()[1]).replace(".", "-")
-        f_name = f"{t_stamp}_{obj_name}{role_label}"
+        f_name = f"{t_stamp}_{obj_name}{role_label}.pickle"
         save_path = pathlib.Path(f_path, f_name)
-        with open(f_name, "wb") as cache:
+        with open(save_path, "wb") as cache:
             pickle.dump(cache_data, cache)
-        return f_name
+        return save_path
 
     # needs refactoring and retooling to accept data
 
@@ -138,8 +139,10 @@ def data_fetcher(func: callable) -> callable:
                 typer.echo(input_fname)
                 ret_value = func(*args, **kwargs)
                 output_fname = cache_writer(
-                    path_str, obj_name, OUTPUT_LABEL, ret_value
-                )
+                    path_str,
+                    obj_name,
+                    OUTPUT_LABEL,
+                    ret_value)
                 typer.echo(output_fname)
                 ts_tup = timestamp()
 

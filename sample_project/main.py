@@ -2,7 +2,7 @@
 
 from rxgemini.fetcher import data_fetcher
 
-# RXGEMINI fetcher off
+# RXGEMINI fetcher on
 
 
 @data_fetcher
@@ -19,6 +19,21 @@ def add_numbers(num1: int, num2: int):
     print("Sum: ", example_sum)
 
 
+@data_fetcher
+def a_function(string: str) -> int:
+    """
+    Example fucntion with a return value
+
+    Args:
+        string (str): String of text
+
+    Returns:
+        int: Length
+    """
+    return len(string)
+
+
 if __name__ == "__main__":
     print("RX Gemini showcase")
     add_numbers(1, 2)
+    a_function("Example string")
