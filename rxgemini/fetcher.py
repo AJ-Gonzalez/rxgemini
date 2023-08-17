@@ -21,6 +21,9 @@ CONFIG = config_checker(internal=True)
 MARKER_KW = CONFIG["MARKER_KW"]
 TAGS = CONFIG["TAGS"]
 SAVE_DIR = CONFIG["SAVE_DIRECTORY"]
+INPUT_LABEL = CONFIG["INPUT_SUFFIX"]
+OUTPUT_LABEL = CONFIG["OUTPUT_SUFFIX"]
+META_LABEL = CONFIG["METADATA_SUFFIX"]
 
 
 def timestamp() -> tuple:
@@ -67,10 +70,13 @@ def check_if_enabled(src_file: str) -> bool:
     return False
 
 
-def path_handler_for_tests():
+def path_handler_for_tests(src_name: str) -> str:
+    file_name = str(pathlib.Path(src_name).name).replace(".py", "")
     cwd = pathlib.Path().cwd()
-    test_save_path = pathlib.Path(cwd, "tests", SAVE_DIR)
+    test_save_path = pathlib.Path(cwd, "tests", SAVE_DIR, file_name)
     typer.echo(test_save_path)
+    pathlib.Path(test_save_path).parents[0].mkdir(parents=True, exist_ok=True)
+    return test_save_path
 
     # make this windows and unix compatible
 
@@ -82,15 +88,18 @@ def cache_writer(
     cache_data: Union[str, tuple],
     meta_mode: Optional[bool] = False,
 ):
-    # (args, kwargs)
     if meta_mode:
         # need to figure out how to do everything path related with pathlib
-        f_name = "dummy"
-        with open(f_name, "w", encoding="utf-8") as cache:
-            json.dump(cache_data, cache, indent=4)
-        return f_name
+        f_name = f"{obj_name}{role_label}"
+        save_path = pathlib.Path(f_path, f_name)
+        if not pathlib.Path(save_path).exists():
+            with open(save_path, "w", encoding="utf-8") as cache:
+                json.dump(cache_data, cache, indent=4)
+        return save_path
     else:
-        f_name = "dummy"
+        t_stamp = str(timestamp()[1]).replace(".", "-")
+        f_name = f"{t_stamp}_{obj_name}{role_label}"
+        save_path = pathlib.Path(f_path, f_name)
         with open(f_name, "wb") as cache:
             pickle.dump(cache_data, cache)
         return f_name
@@ -110,48 +119,44 @@ def data_fetcher(func: callable) -> callable:
             src_code = inspect.getsource(func)
             pprint(src_code)
             pprint(src_file, obj_name)
-            ret_value = func(*args, **kwargs)
-            return ret_value
+            path_str = path_handler_for_tests(src_file)
+            caller_name = ""
+            try:
+                raise ScopeGetterException
+            except ScopeGetterException as expected:
+                frame = sys.exc_info()[2].tb_frame.f_back
+                caller_name = frame.f_code.co_name
+                typer.echo(expected)
+
+            if "test_" in caller_name:
+                ret_value = func(*args, **kwargs)
+                typer.echo("Skipping")
+            else:
+                input_fname = cache_writer(
+                    path_str, obj_name, INPUT_LABEL, (args, kwargs)
+                )
+                typer.echo(input_fname)
+                ret_value = func(*args, **kwargs)
+                output_fname = cache_writer(
+                    path_str, obj_name, OUTPUT_LABEL, ret_value
+                )
+                typer.echo(output_fname)
+                ts_tup = timestamp()
+
+                metadata = {
+                    "name": obj_name,
+                    "timestamp_unix": ts_tup[1],
+                    "timestamp_human": ts_tup[0],
+                    "": "",
+                }
+
+                meta_fname = cache_writer(
+                    path_str, obj_name, META_LABEL, metadata, meta_mode=True
+                )
+                typer.echo(meta_fname)
+                return ret_value
         else:
             ret_value = func(*args, **kwargs)
             return ret_value
-
-        # refactor this as its own parser engine
-        with open(src_file, "r", encoding="utf-8") as runfile:
-            for line in runfile:
-                if line.startswith("#") and MARKER_KW in line:
-                    line = line.replace(MARKER_KW, "")
-                    line = line.replace("#", "")
-                    line = line.strip()
-                    if line.split(" ")[0] == TAGS["FETCHER"][0]:
-                        fetcher_setting = line.split(" ")[1]
-                        if fetcher_setting == TAGS["FETCHER"][1]:
-                            typer.echo("starting fetch")
-                        elif fetcher_setting == TAGS["FETCHER"][2]:
-                            typer.echo("skipping fetch")
-                            ret_value = func(*args, **kwargs)
-                            return ret_value
-        cwd = str(pathlib.Path.cwd())
-        # this will need a reforctor to work on windows
-        path_str = path_handler_for_tests(cwd)
-        caller_name = ""
-        try:
-            raise ScopeGetterException
-        except ScopeGetterException as expected:
-            frame = sys.exc_info()[2].tb_frame.f_back
-            caller_name = frame.f_code.co_name
-            typer.echo(expected)
-
-        if "test_" in caller_name:
-            ret_value = func(*args, **kwargs)
-            typer.echo("Skipping")
-        else:
-            input_fname = cache_writer()
-            # redo cache writer to fit new smart approach
-            ret_value = func(*args, **kwargs)
-            output_fname = cache_writer(path_str, obj_name, label_var, return_val)
-            ts_tup = timestamp()
-            meta_fname = cache_writer(meta_mode=True)
-        return ret_value
 
     return wrapper_fetcher
