@@ -94,18 +94,17 @@ def write_cache(
     cache_data: Union[str, tuple],
     meta_mode: Optional[bool] = False,
 ):
+    t_stamp = str(timestamp()[1]).replace(".", "-")
     if meta_mode:
         # need to figure out how to do everything path related with pathlib
-        f_name = f"{obj_name}{role_label}.json"
+        f_name = f"{t_stamp}{obj_name}{role_label}.json"
         save_path = pathlib.Path(f_path, f_name)
-        typer.echo(f"{save_path} {pathlib.Path(save_path).exists()}")
         if not pathlib.Path(save_path).exists():
             with open(save_path, "w", encoding="utf-8") as cache:
                 json.dump(cache_data, cache, indent=4)
         return save_path
     else:
-        t_stamp = str(timestamp()[1]).replace(".", "-")
-        f_name = f"{t_stamp}_{obj_name}{role_label}.pickle"
+        f_name = f"{t_stamp}{obj_name}{role_label}.pickle"
         save_path = pathlib.Path(f_path, f_name)
         with open(save_path, "wb") as cache:
             pickle.dump(cache_data, cache)

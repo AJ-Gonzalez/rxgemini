@@ -8,7 +8,7 @@ LOG_PREFIX: '[RX_GEMINI]'
 MARKER_KW: RXGEMINI
 METADATA_SUFFIX: -meta
 OUTPUT_SUFFIX: -output
-SAVE_DIRECTORY: test_data_cache
+SAVE_DIRECTORY: test_dc
 TAGS:
   FETCHER:
   - fetcher

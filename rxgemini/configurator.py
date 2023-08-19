@@ -19,9 +19,9 @@ CFG_TEMPLATE: dict = {
     "OUTPUT_SUFFIX": "-output",
     "MARKER_KW": "RXGEMINI",
     "TAGS": {"FETCHER": ["fetcher", "on", "off"]},
-    "DELIMITERS": ["_about_", "_regarding_", "_evaluates_"],
+    "DELIMITERS": ["_about_", "_regarding_", "_evaluates_", "_ensures_"],
     "LOG_PREFIX": "[RX_GEMINI]",
-    "SAVE_DIRECTORY": "test_data_cache",
+    "SAVE_DIRECTORY": "test_dc",
 }
 
 
