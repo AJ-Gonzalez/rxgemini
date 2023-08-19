@@ -92,9 +92,9 @@ def write_cache(
     obj_name: str,
     role_label: str,
     cache_data: Union[str, tuple],
+    t_stamp: str,
     meta_mode: Optional[bool] = False,
 ):
-    t_stamp = str(timestamp()[1]).replace(".", "-")
     if meta_mode:
         # need to figure out how to do everything path related with pathlib
         f_name = f"{t_stamp}{obj_name}{role_label}.json"
@@ -110,10 +110,10 @@ def write_cache(
             pickle.dump(cache_data, cache)
         return save_path
 
-    # needs refactoring and retooling to accept data
 
-    # pickle binaries
-    # metadata to json
+def get_relative_path(absolute_path: str) -> pathlib.Path:
+    cwd = pathlib.Path().cwd()
+    return pathlib.Path(absolute_path).relative_to(cwd)
 
 
 def data_fetcher(func: callable) -> callable:
@@ -138,27 +138,40 @@ def data_fetcher(func: callable) -> callable:
                 ret_val = func(*args, **kwargs)
                 typer.echo("Skipping")
             else:
+                ts_tup = timestamp()
                 params: tuple = (args, kwargs)
-                input_fn = write_cache(f_path, obj_name, INPUT_LBL, params)
+                input_fn = write_cache(
+                    f_path, obj_name, INPUT_LBL, params, ts_tup[1]
+                    )
                 typer.echo(input_fn)
                 ret_val = func(*args, **kwargs)
-                output_fn = write_cache(f_path, obj_name, OUTPUT_LBL, ret_val)
+                output_fn = write_cache(
+                    f_path, obj_name, OUTPUT_LBL, ret_val, ts_tup[1]
+                )
                 typer.echo(output_fn)
-                ts_tup = timestamp()
-                in_types = {arg: type(arg) for arg in args}
-                out_types = {arg: type(arg) for arg in kwargs}
-                print(in_types, out_types)
+                in_types = [str(type(arg)) for arg in args]
+                kwarg_types = [str(type(arg)) for arg in kwargs]
+                print(in_types, kwarg_types)
                 print(inspect.signature(func))
                 metadata = {
                     "name": obj_name,
                     "timestamp_unix": ts_tup[1],
                     "timestamp_human": ts_tup[0],
-                    "file": src_file,
+                    "file": str(get_relative_path(src_file)),
+                    "file_path_parts": get_relative_path(src_file).parts,
                     "docstring": inspect.getdoc(func),
+                    "in_types": in_types,
+                    "kwarg_types": kwarg_types,
+                    "out_type": str(type(ret_val)),
                 }
 
                 meta_fname = write_cache(
-                    f_path, obj_name, META_LABEL, metadata, meta_mode=True
+                    f_path,
+                    obj_name,
+                    META_LABEL,
+                    metadata,
+                    ts_tup[1],
+                    meta_mode=True
                 )
                 typer.echo(meta_fname)
                 return ret_val
