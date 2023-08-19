@@ -6,7 +6,7 @@ import yaml
 import typer
 from rich import print as fprint
 
-from rxgemini import styles
+from rxgemini import lgr
 from rxgemini.errors import MissingConfigError
 from rxgemini.constants import CFG_NAME, CFG_TEMPLATE
 
@@ -26,8 +26,8 @@ def config_loader(filename: str) -> dict:
         with open(filename, "r", encoding="utf-8") as cfgfile:
             return yaml.safe_load(cfgfile)
     except (FileNotFoundError, PermissionError) as err:
-        typer.echo(styles.red_bold(f"Error with configuration file: {err}"))
-        typer.echo(styles.red_bold("File does not exist or is inaccessible"))
+        typer.echo(lgr.red_bold(f"Error with configuration file: {err}"))
+        typer.echo(lgr.red_bold("File does not exist or is inaccessible"))
         return None
 
 
@@ -36,14 +36,14 @@ def config_writer():
     Writes the default RX Gemini configuration file
     upon user confirmation.
     """
-    write = typer.confirm(styles.cyan_bold("Generate config file?"))
+    write = typer.confirm(lgr.cyan_bold("Generate config file?"))
     if write:
         f_name: str = CFG_NAME[0]
-        typer.echo(styles.cyan_bold(f"Writing config file {f_name}"))
+        typer.echo(lgr.cyan_bold(f"Writing config file {f_name}"))
         with open(f_name, "w", encoding="utf-8") as cfg:
             yaml.dump(CFG_TEMPLATE, cfg)
     else:
-        typer.echo(styles.yellow_bold("Operation cancelled by User."))
+        typer.echo(lgr.yellow_bold("Operation cancelled by User."))
 
 
 def config_checker(internal: bool = False) -> Union[bool, dict]:
@@ -68,7 +68,7 @@ def config_checker(internal: bool = False) -> Union[bool, dict]:
             if checker.exists():
                 return config_loader(f_name)
         raise MissingConfigError
-    typer.echo(styles.magenta_bold(f"Checking directory: {Path().cwd()}"))
+    typer.echo(lgr.magenta_bold(f"Checking directory: {Path().cwd()}"))
     for f_name in CFG_NAME:
         # Instantiate the Path class
         obj = Path(f_name)
@@ -76,8 +76,8 @@ def config_checker(internal: bool = False) -> Union[bool, dict]:
         # Check if path exists
         if obj.exists():
             msg = f"Found configuration file: {f_name}"
-            typer.echo(styles.green_bold(msg))
+            typer.echo(lgr.green_bold(msg))
             fprint(config_loader(f_name))
             return True
-    typer.echo(styles.yellow_bold("No configuration file found"))
+    typer.echo(lgr.yellow_bold("No configuration file found"))
     return False

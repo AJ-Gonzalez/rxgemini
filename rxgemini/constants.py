@@ -4,7 +4,13 @@
 CFG_NAME: tuple = ("rxgemini_cfg.yaml", "rxgemini_cfg.yml")
 
 CFG_TEMPLATE: dict = {
+    # Unused for now, in roadmap
     "FORMALITY": 0,
+    # Log modes:
+    # python: uses python logger
+    # pretty: uses colorful typer messages
+    # quiet: only shows prompts and essential info
+    "LOG_MODE": "pretty",
     "METADATA_SUFFIX": "-meta",
     "INPUT_SUFFIX": "-input",
     "OUTPUT_SUFFIX": "-output",
