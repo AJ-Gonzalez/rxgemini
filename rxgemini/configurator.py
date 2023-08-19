@@ -8,21 +8,7 @@ from rich import print as fprint
 
 from rxgemini import styles
 from rxgemini.errors import MissingConfigError
-
-
-CFG_NAME: tuple = ("rxgemini_cfg.yaml", "rxgemini_cfg.yml")
-
-CFG_TEMPLATE: dict = {
-    "FORMALITY": 0,
-    "METADATA_SUFFIX": "-meta",
-    "INPUT_SUFFIX": "-input",
-    "OUTPUT_SUFFIX": "-output",
-    "MARKER_KW": "RXGEMINI",
-    "TAGS": {"FETCHER": ["fetcher", "on", "off"]},
-    "DELIMITERS": ["_about_", "_regarding_", "_evaluates_", "_ensures_"],
-    "LOG_PREFIX": "[RX_GEMINI]",
-    "SAVE_DIRECTORY": "test_dc",
-}
+from rxgemini.constants import CFG_NAME, CFG_TEMPLATE
 
 
 def config_loader(filename: str) -> dict:
