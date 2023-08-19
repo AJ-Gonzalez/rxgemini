@@ -173,6 +173,10 @@ WIP
 
 ## Roadmap
 
+Please note that the current roadmap only supports `unittest` for test generation.
+
+If there is interest in supporting automatig other kinds of test generaration and supporting PyTest or Nose2 please let me know. I would like to include support for those and for smart test automation.
+
 - Smart Data Fetch
 - Data Type validation
 - Smart Data Injection
