@@ -27,6 +27,16 @@ META_LABEL = CONFIG["METADATA_SUFFIX"]
 
 
 def get_arg_vars(func: callable) -> dict:
+    """
+
+    Gets argument variable names
+
+    Args:
+        func (callable): Function or method object
+
+    Returns:
+        dict: dictionary of args
+    """
     print(inspect.signature(func))
     arg_dict = {}
     return arg_dict
@@ -93,9 +103,9 @@ def write_cache(
     role_label: str,
     cache_data: Union[str, tuple],
     t_stamp: str,
-    meta_mode: Optional[bool] = False,
+    meta: Optional[bool] = False,
 ):
-    if meta_mode:
+    if meta:
         # need to figure out how to do everything path related with pathlib
         f_name = f"{t_stamp}{obj_name}{role_label}.json"
         save_path = pathlib.Path(f_path, f_name)
@@ -141,8 +151,7 @@ def data_fetcher(func: callable) -> callable:
                 ts_tup = timestamp()
                 params: tuple = (args, kwargs)
                 input_fn = write_cache(
-                    f_path, obj_name, INPUT_LBL, params, ts_tup[1]
-                    )
+                    f_path, obj_name, INPUT_LBL, params, ts_tup[1])
                 typer.echo(input_fn)
                 ret_val = func(*args, **kwargs)
                 output_fn = write_cache(
@@ -167,11 +176,7 @@ def data_fetcher(func: callable) -> callable:
 
                 meta_fname = write_cache(
                     f_path,
-                    obj_name,
-                    META_LABEL,
-                    metadata,
-                    ts_tup[1],
-                    meta_mode=True
+                    obj_name, META_LABEL, metadata, ts_tup[1], meta=True
                 )
                 typer.echo(meta_fname)
                 return ret_val
