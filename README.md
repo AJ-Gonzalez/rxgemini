@@ -226,6 +226,8 @@ Example `feat: added smart scanner`
 | docs   | Changes to Documentation, or docstrings     |
 | fmt    | Formatting (no logic changed)               |
 | ref    | Refactor or rework                          |
+| bld    | Wheel and build exclusive                   |
+| rls    | Relase commit                               |
 
 ### Branch Naming Convention
 
