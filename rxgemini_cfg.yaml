@@ -2,13 +2,15 @@ DELIMITERS:
 - _about_
 - _regarding_
 - _evaluates_
+- _ensures_
 FORMALITY: 0
 INPUT_SUFFIX: -input
+LOG_MODE: pretty
 LOG_PREFIX: '[RX_GEMINI]'
 MARKER_KW: RXGEMINI
 METADATA_SUFFIX: -meta
 OUTPUT_SUFFIX: -output
-SAVE_DIRECTORY: test_data_cache
+SAVE_DIRECTORY: test_dc
 TAGS:
   FETCHER:
   - fetcher
