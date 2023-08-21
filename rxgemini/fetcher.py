@@ -87,6 +87,15 @@ def check_if_enabled(src_file: str) -> bool:
 
 
 def path_handler_for_tests(src_name: str) -> str:
+    """
+    Path handler function
+
+    Args:
+        src_name (str): source file
+
+    Returns:
+        str: save path
+    """
     file_name = str(pathlib.Path(src_name).name).replace(".py", "")
     cwd = pathlib.Path().cwd()
     test_save_path = pathlib.Path(cwd, "tests", SAVE_DIR, file_name)
@@ -105,6 +114,20 @@ def write_cache(
     t_stamp: str,
     meta: Optional[bool] = False,
 ):
+    """
+    Cahce writer, (will be replaced in upcoming refactor)
+
+    Args:
+        f_path (str): _description_
+        obj_name (str): _description_
+        role_label (str): _description_
+        cache_data (Union[str, tuple]): _description_
+        t_stamp (str): _description_
+        meta (Optional[bool], optional): _description_. Defaults to False.
+
+    Returns:
+        _type_: _description_
+    """
     if meta:
         # need to figure out how to do everything path related with pathlib
         f_name = f"{t_stamp}{obj_name}{role_label}.json"
@@ -122,11 +145,33 @@ def write_cache(
 
 
 def get_relative_path(absolute_path: str) -> pathlib.Path:
+    """
+    Gets path relative to CWD
+
+    Args:
+        absolute_path (str): abodulte path
+
+    Returns:
+        pathlib.Path: relative path
+    """
     cwd = pathlib.Path().cwd()
     return pathlib.Path(absolute_path).relative_to(cwd)
 
 
 def data_fetcher(func: callable) -> callable:
+    """
+
+    Data fetcher decorator to gather test data
+
+    Args:
+        func (callable): Function or method
+
+    Raises:
+        ScopeGetterException: A special error to graba stack trace
+
+    Returns:
+        callable: Called function/method
+    """
     @functools.wraps(func)
     def wrapper_fetcher(*args, **kwargs):
         src_file = inspect.getfile(func)
