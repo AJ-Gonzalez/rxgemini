@@ -11,31 +11,19 @@ import typer
 from rich import print as pprint
 
 from rxgemini.configurator import config_checker
+from rxgemini.constants import LOG_CONF
 
 
-logging_config = dict(
-    version=1,
-    formatters={
-        'f': {'format':
-              '%(asctime)s %(name)-12s %(levelname)-8s %(message)s'}
-    },
-    handlers={
-        'h': {'class': 'logging.StreamHandler',
-              'formatter': 'f',
-              'level': logging.DEBUG}
-    },
-    root={
-        'handlers': ['h'],
-        'level': logging.DEBUG,
-    },
-)
-
-dictConfig(logging_config)
+dictConfig(LOG_CONF)
 
 logger = logging.getLogger()
 coloredlogs.install(logger=logger)
 
 logger.info('often makes a very good meal of %s', 'visiting tourists')
+logger.error('often makes a very good meal of %s', 'visiting tourists')
+logger.warning('often makes a very good meal of %s', 'visiting tourists')
+logger.critical('often makes a very good meal of %s', 'visiting tourists')
+logger.debug("message")
 
 CONFIG = config_checker(internal=True)
 
