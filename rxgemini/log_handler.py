@@ -1,4 +1,4 @@
-"""Log Handling and output syling, abbreviated from logger to lgr"""
+"""Log Handling and pront utilities"""
 
 
 import logging
@@ -6,8 +6,6 @@ from logging.config import dictConfig
 from typing import Any
 import coloredlogs
 
-
-import typer
 from rich import print as pprint
 
 from rxgemini.configurator import config_checker
@@ -28,71 +26,6 @@ logger.debug("message")
 CONFIG = config_checker(internal=True)
 
 PREFIX = CONFIG["LOG_PREFIX"]
-
-
-def green_bold(text: str) -> str:
-    """
-    Green bold text
-
-    Args:
-        text (str): input text to format
-
-    Returns:
-        str: formatted text
-    """
-    return typer.style(text, fg=typer.colors.GREEN, bold=True)
-
-
-def red_bold(text: str) -> str:
-    """
-    Red bold text
-
-    Args:
-        text (str): input text to format
-
-    Returns:
-        str: formatted text
-    """
-    return typer.style(text, fg=typer.colors.RED, bold=True)
-
-
-def yellow_bold(text: str) -> str:
-    """
-    Yellow bold text
-
-    Args:
-        text (str): input text to format
-
-    Returns:
-        str: formatted text
-    """
-    return typer.style(text, fg=typer.colors.YELLOW, bold=True)
-
-
-def cyan_bold(text: str) -> str:
-    """
-    Cyan bold text
-
-    Args:
-        text (str): input text to format
-
-    Returns:
-        str: formatted text
-    """
-    return typer.style(text, fg=typer.colors.CYAN, bold=True)
-
-
-def magenta_bold(text: str) -> str:
-    """
-    Magenta bold text
-
-    Args:
-        text (str): input text to format
-
-    Returns:
-        str: formatted text
-    """
-    return typer.style(text, fg=typer.colors.MAGENTA, bold=True)
 
 
 def pretty_print(item: Any):
