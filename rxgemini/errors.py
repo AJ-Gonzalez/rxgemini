@@ -11,6 +11,16 @@ class MissingConfigError(Exception):
         super().__init__(self.message)
 
 
+class ErroneousConfigError(Exception):
+    """
+    Configuration file has one or more incorrect values
+    """
+
+    def __init__(self, field: str = ""):
+        self.message = f"Config file has one or more incorrect values: {field}"
+        super().__init__(self.message)
+
+
 class ScopeGetterException(Exception):
     """
     Custom exception for fetching stack trace.
