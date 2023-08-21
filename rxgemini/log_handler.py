@@ -17,12 +17,6 @@ dictConfig(LOG_CONF)
 logger = logging.getLogger()
 coloredlogs.install(logger=logger)
 
-logger.info('often makes a very good meal of %s', 'visiting tourists')
-logger.error('often makes a very good meal of %s', 'visiting tourists')
-logger.warning('often makes a very good meal of %s', 'visiting tourists')
-logger.critical('often makes a very good meal of %s', 'visiting tourists')
-logger.debug("message")
-
 CONFIG = config_checker(internal=True)
 
 PREFIX = CONFIG["LOG_PREFIX"]
@@ -37,3 +31,24 @@ def pretty_print(item: Any):
         item (Any): item to pretty print_
     """
     pprint(item)
+
+
+def info(message: str):
+    logger.info("%s %s", PREFIX, message)
+
+
+def warning(message: str):
+    logger.warning("%s %s", PREFIX, message)
+
+
+def error(message: str):
+    logger.error("%s %s", PREFIX, message)
+
+
+def critical(message: str):
+    logger.critical("%s %s", PREFIX, message)
+
+
+
+
+critical("sample message")
