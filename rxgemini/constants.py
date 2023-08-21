@@ -41,3 +41,5 @@ DESCRIPTION: str = """
     """
 
 EXT = ".gmni"
+
+LOGGING_OPTS = ("python", "pretty", "pretty_timestamped", "quiet")

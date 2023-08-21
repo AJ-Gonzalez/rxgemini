@@ -1,10 +1,10 @@
 """Log Handling and output syling, abbreviated from logger to lgr"""
 
 from typing import Any
-
 import typer
-
 from rich import print as pprint
+
+from rxgemini.configurator import config_checker
 
 
 def green_bold(text: str) -> str:
