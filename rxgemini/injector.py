@@ -1,5 +1,7 @@
 """Injection module for RX Gemini"""
 
+# pylint: skip-file
+# Skipping file because it has a pending refactor
 import functools
 import inspect
 import pathlib

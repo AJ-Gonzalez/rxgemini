@@ -1,5 +1,6 @@
 """Data fetcher module for rxgemini"""
-
+# pylint: skip-file
+# Skipping file because of pending refactor
 import functools
 import inspect
 import pathlib
