@@ -13,8 +13,12 @@ CONFIG = config_checker(internal=True)
 META_LABEL = CONFIG["META_LABEL"]
 
 
+def path_handler_for_tests():
+    return 1
+
+
 def metadata_reader(filename: str):
-    pass
+    return {"IN": "", "OUT": ""}
 
 
 def pickle_reader(filename: str):
@@ -22,8 +26,8 @@ def pickle_reader(filename: str):
 
 
 def auto_injector(func):
-    @functools.wraps()
-    def wrapper_injector():
+    @functools.wraps(func)
+    def wrapper_injector(*args, **kwargs):
         # TODO: add delimiter functionality
         obj_name = func.__name__
         obj_file = inspect.getfile(func)
@@ -45,7 +49,7 @@ def auto_injector(func):
         cwd = pathlib.Path.cwd()
         obj_path = src_path.replace()
         typer.echo(cwd)
-        checker = path_handler_for_tests(obj_path)
+        checker = path_handler_for_tests()
         typer.echo(f"fetching from{ obj_path}")
         # metadata path will need refactoring to work on windows hosts
         metadata = metadata_reader(f"{checker}/{lookup_val}{META_LABEL}.json")

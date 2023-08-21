@@ -6,6 +6,10 @@ from rich import print as pprint
 
 from rxgemini.configurator import config_checker
 
+CONFIG = config_checker(internal=True)
+
+PREFIX = CONFIG["LOG_PREFIX"]
+
 
 def green_bold(text: str) -> str:
     """
