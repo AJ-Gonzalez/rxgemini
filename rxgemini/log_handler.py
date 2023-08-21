@@ -1,10 +1,36 @@
 """Log Handling and output syling, abbreviated from logger to lgr"""
 
+import logging
+from logging.config import dictConfig
+
 from typing import Any
 import typer
 from rich import print as pprint
 
 from rxgemini.configurator import config_checker
+
+
+logging_config = dict(
+    version=1,
+    formatters={
+        'f': {'format':
+              '%(asctime)s %(name)-12s %(levelname)-8s %(message)s'}
+    },
+    handlers={
+        'h': {'class': 'logging.StreamHandler',
+              'formatter': 'f',
+              'level': logging.DEBUG}
+    },
+    root={
+        'handlers': ['h'],
+        'level': logging.DEBUG,
+    },
+)
+
+dictConfig(logging_config)
+
+logger = logging.getLogger()
+logger.debug('often makes a very good meal of %s', 'visiting tourists')
 
 CONFIG = config_checker(internal=True)
 
@@ -74,12 +100,6 @@ def magenta_bold(text: str) -> str:
         str: formatted text
     """
     return typer.style(text, fg=typer.colors.MAGENTA, bold=True)
-
-
-if __name__ == "__main__":
-    typer.echo(green_bold("example text here"))
-    typer.echo(red_bold("more sample text"))
-    typer.echo(yellow_bold("more sample text"))
 
 
 def pretty_print(item: Any):
