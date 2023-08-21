@@ -46,8 +46,8 @@ def b_function(string: str, sample_kwarg: bool = True) -> int:
     """
     if sample_kwarg:
         return len(string)
-    else:
-        return None
+
+    return None
 
 
 if __name__ == "__main__":
