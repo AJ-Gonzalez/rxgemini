@@ -18,17 +18,18 @@ def path_handler_for_tests():
 
 
 def metadata_reader(filename: str):
+    typer.echo(filename)
     return {"IN": "", "OUT": ""}
 
 
 def pickle_reader(filename: str):
-    pass
+    typer.echo(filename)
 
 
 def auto_injector(func):
     @functools.wraps(func)
-    def wrapper_injector(*args, **kwargs):
-        # TODO: add delimiter functionality
+    def wrapper_injector(*args):
+        # THis whole fucntion will be refactored later
         obj_name = func.__name__
         obj_file = inspect.getfile(func)
         lookup_val = obj_name.replace("test_", "")
