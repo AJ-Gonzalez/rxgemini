@@ -1,9 +1,12 @@
 """Log Handling and output syling, abbreviated from logger to lgr"""
 
+
 import logging
 from logging.config import dictConfig
-
 from typing import Any
+import coloredlogs
+
+
 import typer
 from rich import print as pprint
 
@@ -30,7 +33,9 @@ logging_config = dict(
 dictConfig(logging_config)
 
 logger = logging.getLogger()
-logger.debug('often makes a very good meal of %s', 'visiting tourists')
+coloredlogs.install(logger=logger)
+
+logger.info('often makes a very good meal of %s', 'visiting tourists')
 
 CONFIG = config_checker(internal=True)
 
