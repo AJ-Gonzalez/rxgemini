@@ -4,7 +4,7 @@ import sys
 
 import typer
 
-from rxgemini import lgr
+from rxgemini import styles
 from rxgemini import configurator
 from rxgemini import constants
 
@@ -42,7 +42,7 @@ def generate_config():
     Checks if there is a configuration file and generates one if there
     is none
     """
-    typer.echo(lgr.cyan_bold("Checking for configuration file..."))
+    typer.echo(styles.cyan_bold("Checking for configuration file..."))
     if configurator.config_checker():
         sys.exit()
     else:
@@ -55,7 +55,7 @@ def generate_tests():
     """
     Sample Command
     """
-    typer.echo(lgr.cyan_bold("WIP Placeholder for test generator"))
+    typer.echo(styles.cyan_bold("WIP Placeholder for test generator"))
 
 
 if __name__ == "__main__":
