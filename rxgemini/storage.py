@@ -24,6 +24,9 @@ class LoggedInstance:
     Gives a faithful snapshot of captured data
     as well as annotations for checking types.
     """
+    # pylint: disable=too-many-instance-attributes
+    # Number of attributes being large is preferable
+    # To having too many metadata files per call.
     obj_name: str
     timestamp_unix: float
     timestamp_human: str
@@ -39,11 +42,29 @@ class LoggedInstance:
 
 
 def get_relative_path(absolute_path: str) -> pathlib.Path:
+    """
+    Gets relative path from CWD
+
+    Args:
+        absolute_path (str): Absolute path
+
+    Returns:
+        pathlib.Path: relative path object
+    """
     cwd = pathlib.Path().cwd()
     return pathlib.Path(absolute_path).relative_to(cwd)
 
 
 def path_handler(src_name: str) -> str:
+    """
+    Handles paths for call storage
+
+    Args:
+        src_name (str): source file
+
+    Returns:
+        str: save path for file
+    """
     file_name = str(pathlib.Path(src_name).name).replace(".py", "")
     cwd = pathlib.Path().cwd()
     test_save_path = pathlib.Path(cwd, "tests", SAVE_DIR, file_name)

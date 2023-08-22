@@ -17,7 +17,7 @@ class TestFetcher(unittest.TestCase):
         """
         Tests path handling function
         """
-        self.assertEqual(path_handler_for_tests(), None)
+        self.assertIsInstance(path_handler_for_tests("main.py"), str)
 
 
 if __name__ == "__main__":

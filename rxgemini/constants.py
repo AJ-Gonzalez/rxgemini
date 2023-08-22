@@ -41,3 +41,19 @@ DESCRIPTION: str = """
     """
 
 EXT = ".gmni"
+
+LOGGING_OPTS = ("python", "pretty", "pretty_timestamped", "quiet")
+
+
+LOG_CONF = {
+    "version": 1,
+    "formatters": {
+        "f": {
+            "format": "%(asctime)s %(name)-12s %(levelname)-8s %(message)s"}
+    },
+    "handlers":
+    {"h":
+     {
+         'class': 'logging.StreamHandler', 'formatter': 'f', 'level': 10}
+     },
+    'root': {'handlers': ['h'], 'level': 10}}
