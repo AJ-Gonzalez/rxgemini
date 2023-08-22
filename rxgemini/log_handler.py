@@ -44,19 +44,23 @@ def pretty_print(item: Any):
 
 
 def info(message: str):
-    logger.info("%s %s", PREFIX, message)
+    if LOG_MODE == LOGGING_OPTS[0]:
+        logger.info("%s %s", PREFIX, message)
 
 
 def warning(message: str):
-    logger.warning("%s %s", PREFIX, message)
+    if LOG_MODE == LOGGING_OPTS[0]:
+        logger.warning("%s %s", PREFIX, message)
 
 
 def error(message: str):
-    logger.error("%s %s", PREFIX, message)
+    if LOG_MODE == LOGGING_OPTS[0]:
+        logger.error("%s %s", PREFIX, message)
 
 
 def critical(message: str):
-    logger.critical("%s %s", PREFIX, message)
+    if LOG_MODE == LOGGING_OPTS[0]:
+        logger.critical("%s %s", PREFIX, message)
 
 
 critical("sample message")
