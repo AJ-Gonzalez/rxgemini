@@ -98,7 +98,7 @@ def path_handler_for_tests(src_name: str) -> str:
     """
     file_name = str(pathlib.Path(src_name).name).replace(".py", "")
     cwd = pathlib.Path().cwd()
-    test_save_path = pathlib.Path(cwd, "tests", SAVE_DIR, file_name)
+    test_save_path = pathlib.Path(cwd, "test", SAVE_DIR, file_name)
     log_info(f"Save path for data: {test_save_path}")
     pathlib.Path(test_save_path).mkdir(parents=True, exist_ok=True)
     return test_save_path
