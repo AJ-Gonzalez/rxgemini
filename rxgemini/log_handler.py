@@ -47,7 +47,7 @@ def timestamp() -> str:
     return human_readable
 
 
-def pretty_print(item: Any):
+def pretty_print(*items: Any):
     """
 
     Pretty printer shourcut to standardize module use
@@ -55,7 +55,7 @@ def pretty_print(item: Any):
     Args:
         item (Any): item to pretty print_
     """
-    pprint(item)
+    pprint(*items)
 
 
 def log_info(message: str):
