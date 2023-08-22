@@ -1,0 +1,17 @@
+{
+    "name": "a_function",
+    "timestamp_unix": 1692676321.961264,
+    "timestamp_human": "2023-08-21 21:52:01",
+    "file": "sample_project\\src\\main.py",
+    "file_path_parts": [
+        "sample_project",
+        "src",
+        "main.py"
+    ],
+    "docstring": "Example fucntion with a return value\n\nArgs:\n    string (str): String of text\n\nReturns:\n    int: Length",
+    "in_types": [
+        "<class 'str'>"
+    ],
+    "kwarg_types": [],
+    "out_type": "<class 'int'>"
+}

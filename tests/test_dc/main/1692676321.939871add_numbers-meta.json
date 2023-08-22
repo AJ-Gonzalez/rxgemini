@@ -1,0 +1,18 @@
+{
+    "name": "add_numbers",
+    "timestamp_unix": 1692676321.939871,
+    "timestamp_human": "2023-08-21 21:52:01",
+    "file": "sample_project\\src\\main.py",
+    "file_path_parts": [
+        "sample_project",
+        "src",
+        "main.py"
+    ],
+    "docstring": "Example function to showcase fetcher decorator usage\n\nArgs:\n    num1 (int): Number\n    num2 (int): Other number",
+    "in_types": [
+        "<class 'int'>",
+        "<class 'int'>"
+    ],
+    "kwarg_types": [],
+    "out_type": "<class 'NoneType'>"
+}

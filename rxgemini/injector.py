@@ -10,6 +10,7 @@ import typer
 
 
 from rxgemini.configurator import config_checker
+from rxgemini.log_handler import log_warning, log_info
 
 CONFIG = config_checker(internal=True)
 META_LABEL = CONFIG["META_LABEL"]
@@ -20,12 +21,12 @@ def path_handler_for_tests():
 
 
 def metadata_reader(filename: str):
-    typer.echo(filename)
+    log_info(filename)
     return {"IN": "", "OUT": ""}
 
 
 def pickle_reader(filename: str):
-    typer.echo(filename)
+    log_info(filename)
 
 
 def auto_injector(func):
@@ -51,9 +52,9 @@ def auto_injector(func):
                     src_path = line
         cwd = pathlib.Path.cwd()
         obj_path = src_path.replace()
-        typer.echo(cwd)
+        log_info(f"Current working directory: {cwd}")
         checker = path_handler_for_tests()
-        typer.echo(f"fetching from{ obj_path}")
+        log_info(f"Fetching from{ obj_path}")
         # metadata path will need refactoring to work on windows hosts
         metadata = metadata_reader(f"{checker}/{lookup_val}{META_LABEL}.json")
         test_data = {
@@ -63,5 +64,5 @@ def auto_injector(func):
         try:
             func(args[0], test_data)
         except IndexError as err_msg:
-            typer.echo(err_msg)
+            log_warning(f"Running from outside testing files:{err_msg}")
             func(test_data)
