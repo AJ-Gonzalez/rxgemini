@@ -59,6 +59,12 @@ def pretty_print(item: Any):
 
 
 def log_info(message: str):
+    """
+    Logs info message
+
+    Args:
+        message (str): message to log
+    """
     if LOG_MODE == LOGGING_OPTS[0]:
         logger.info("%s %s", PREFIX, message)
     elif LOG_MODE == LOGGING_OPTS[1]:
@@ -69,6 +75,12 @@ def log_info(message: str):
 
 
 def general(message: str):
+    """
+    Logs general message
+
+    Args:
+        message (str): message to log
+    """
     if LOG_MODE == LOGGING_OPTS[0]:
         logger.info("%s %s", PREFIX, message)
     elif LOG_MODE == LOGGING_OPTS[1]:
@@ -81,6 +93,12 @@ def general(message: str):
 
 
 def log_warning(message: str):
+    """
+    Logs warning message
+
+    Args:
+        message (str): message to log
+    """
     if LOG_MODE == LOGGING_OPTS[0]:
         logger.warning("%s %s", PREFIX, message)
     elif LOG_MODE == LOGGING_OPTS[1]:
@@ -93,6 +111,12 @@ def log_warning(message: str):
 
 
 def log_error(message: str):
+    """
+    Logs error message
+
+    Args:
+        message (str): message to log
+    """
     if LOG_MODE == LOGGING_OPTS[0]:
         logger.error("%s %s", PREFIX, message)
     elif LOG_MODE == LOGGING_OPTS[1]:
@@ -105,6 +129,12 @@ def log_error(message: str):
 
 
 def log_critical(message: str):
+    """
+    Logs critical message
+
+    Args:
+        message (str): message to log
+    """
     if LOG_MODE == LOGGING_OPTS[0]:
         logger.critical("%s %s", PREFIX, message)
     elif LOG_MODE == LOGGING_OPTS[1]:
@@ -117,9 +147,9 @@ def log_critical(message: str):
         message = f"!!! -> {message}"
         typer.echo(styles.red_bold(message))
 
-
-general("sample message")
-log_info("sample message")
-log_warning("sample message")
-log_error("sample message")
-log_critical("sample message")
+# Syntax example
+# general("sample message")
+# log_info("sample message")
+# log_warning("sample message")
+# log_error("sample message")
+# log_critical("sample message")
