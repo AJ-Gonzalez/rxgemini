@@ -10,6 +10,8 @@ from rxgemini import styles
 from rxgemini.errors import MissingConfigError
 from rxgemini.constants import CFG_NAME, CFG_TEMPLATE
 
+# This file does not use the log handler module to avoid circular imports
+
 
 def config_loader(filename: str) -> dict:
     """
