@@ -10,12 +10,10 @@ import pickle
 from datetime import datetime
 from typing import Union, Optional
 
-import typer
-from rich import print as pprint
 
 from rxgemini.configurator import config_checker
 from rxgemini.errors import ScopeGetterException
-from rxgemini.log_handler import log_warning, log_info
+from rxgemini.log_handler import log_warning, log_info, pretty_print
 
 CONFIG = config_checker(internal=True)
 
@@ -101,7 +99,7 @@ def path_handler_for_tests(src_name: str) -> str:
     file_name = str(pathlib.Path(src_name).name).replace(".py", "")
     cwd = pathlib.Path().cwd()
     test_save_path = pathlib.Path(cwd, "tests", SAVE_DIR, file_name)
-    typer.echo(test_save_path)
+    log_info(f"Save path for data: {test_save_path}")
     pathlib.Path(test_save_path).mkdir(parents=True, exist_ok=True)
     return test_save_path
 
@@ -180,8 +178,8 @@ def data_fetcher(func: callable) -> callable:
         if check_if_enabled(src_file):
             obj_name = func.__name__
             src_code = inspect.getsource(func)
-            pprint(src_code)
-            pprint(src_file, obj_name)
+            pretty_print(src_code)
+            pretty_print(src_file, obj_name)
             f_path = path_handler_for_tests(src_file)
             caller_name = ""
             try:
@@ -199,12 +197,12 @@ def data_fetcher(func: callable) -> callable:
                 params: tuple = (args, kwargs)
                 input_fn = write_cache(
                     f_path, obj_name, INPUT_LBL, params, ts_tup[1])
-                typer.echo(input_fn)
+                log_info(f"input: {input_fn}")
                 ret_val = func(*args, **kwargs)
                 output_fn = write_cache(
                     f_path, obj_name, OUTPUT_LBL, ret_val, ts_tup[1]
                 )
-                typer.echo(output_fn)
+                log_info(f"Output: {output_fn}")
                 in_types = [str(type(arg)) for arg in args]
                 kwarg_types = [str(type(arg)) for arg in kwargs]
                 # print(in_types, kwarg_types)
