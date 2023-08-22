@@ -15,6 +15,7 @@ from rich import print as pprint
 
 from rxgemini.configurator import config_checker
 from rxgemini.errors import ScopeGetterException
+from rxgemini.log_handler import log_warning, log_info
 
 CONFIG = config_checker(internal=True)
 
@@ -78,12 +79,12 @@ def check_if_enabled(src_file: str) -> bool:
                 if line.split(" ")[0] == TAGS["FETCHER"][0]:
                     fetcher_setting = line.split(" ")[1]
                     if fetcher_setting == TAGS["FETCHER"][1]:
-                        typer.echo("starting fetch")
+                        log_info("Starting data fetch")
                         return True
                     elif fetcher_setting == TAGS["FETCHER"][2]:
-                        typer.echo("skipping fetch")
+                        log_info("Skipping data fetch")
                         return False
-    typer.echo("No keyword found, skipping fetch by default")
+    log_warning("No explicit keyword found, skipping fetch by default")
     return False
 
 
@@ -114,7 +115,7 @@ def write_cache(
     cache_data: Union[str, tuple],
     t_stamp: str,
     meta: Optional[bool] = False,
-):
+) -> pathlib.Path:
     """
     Cahce writer, (will be replaced in upcoming refactor)
 
@@ -127,7 +128,7 @@ def write_cache(
         meta (Optional[bool], optional): _description_. Defaults to False.
 
     Returns:
-        _type_: _description_
+        pathlib.Path:  save path
     """
     if meta:
         # need to figure out how to do everything path related with pathlib
@@ -188,11 +189,11 @@ def data_fetcher(func: callable) -> callable:
             except ScopeGetterException as expected:
                 frame = sys.exc_info()[2].tb_frame.f_back
                 caller_name = frame.f_code.co_name
-                typer.echo(expected)
+                log_info(f"Obtained stack trace: {expected}")
 
             if "test_" in caller_name:
                 ret_val = func(*args, **kwargs)
-                typer.echo("Skipping")
+                log_info("Skipping since this is a test method")
             else:
                 ts_tup = timestamp()
                 params: tuple = (args, kwargs)
@@ -206,8 +207,8 @@ def data_fetcher(func: callable) -> callable:
                 typer.echo(output_fn)
                 in_types = [str(type(arg)) for arg in args]
                 kwarg_types = [str(type(arg)) for arg in kwargs]
-                print(in_types, kwarg_types)
-                print(inspect.signature(func))
+                # print(in_types, kwarg_types)
+                # print(inspect.signature(func))
                 metadata = {
                     "name": obj_name,
                     "timestamp_unix": ts_tup[1],
@@ -224,7 +225,7 @@ def data_fetcher(func: callable) -> callable:
                     f_path,
                     obj_name, META_LABEL, metadata, ts_tup[1], meta=True
                 )
-                typer.echo(meta_fname)
+                log_info(f"Wrote info to:{meta_fname}")
                 return ret_val
         else:
             ret_val = func(*args, **kwargs)
