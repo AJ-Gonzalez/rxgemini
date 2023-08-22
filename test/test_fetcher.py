@@ -1,6 +1,7 @@
 """Test Module for fetcher"""
 
 import unittest
+import pathlib
 
 from rxgemini.fetcher import path_handler_for_tests
 
@@ -17,7 +18,7 @@ class TestFetcher(unittest.TestCase):
         """
         Tests path handling function
         """
-        self.assertIsInstance(path_handler_for_tests("main.py"), str)
+        self.assertIsInstance(path_handler_for_tests("main.py"), pathlib.Path)
 
 
 if __name__ == "__main__":
