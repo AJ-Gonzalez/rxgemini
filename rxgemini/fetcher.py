@@ -8,12 +8,14 @@ import sys
 import json
 import pickle
 from datetime import datetime
-from typing import Union, Optional
+from typing import Union, Optional, Tuple, Any
 
 
 from rxgemini.configurator import config_checker
 from rxgemini.errors import ScopeGetterException
 from rxgemini.log_handler import log_warning, log_info, pretty_print
+from rxgemini.storage import LoggedInstance, store_instance
+from rxgemini.constants import LOGGING_OPTS
 
 CONFIG = config_checker(internal=True)
 
@@ -24,6 +26,38 @@ SAVE_DIR = CONFIG["SAVE_DIRECTORY"]
 INPUT_LBL = CONFIG["INPUT_SUFFIX"]
 OUTPUT_LBL = CONFIG["OUTPUT_SUFFIX"]
 META_LABEL = CONFIG["METADATA_SUFFIX"]
+LOG_MODE = CONFIG["LOG_MODE"]
+
+
+def in_types_handler(
+        signature: inspect.Signature,
+        call_types: list) -> Tuple[dict]:
+    keys = [key for key in signature.parameters]
+    actual_types_dict = {}
+    expected_types_dict = {}
+    cursor: int = 0
+    for key in keys:
+        param_str = str(signature.parameters[key])
+        if ":" not in param_str:
+            log_warning(f"Parameter {key} has no type annotation!")
+            expected_types_dict[key] = Any
+        else:
+            # The variable is left for logging and legibility
+            expected_param_type = param_str.split(":")[1].strip()
+            expected_types_dict[key] = eval(expected_param_type)
+            log_info(f"Parameter {key} expects {expected_param_type}")
+
+        try:
+            actual_type = call_types[cursor]
+            actual_types_dict[key] = actual_type
+        except IndexError as err_msg:
+            actual_types_dict[key] = type(None)
+            log_warning(f"Parameter {key} not in call: {err_msg}")
+
+        # Do not move cursor
+        cursor += 1
+
+    return (expected_types_dict, actual_types_dict)
 
 
 def get_arg_vars(func: callable) -> dict:
@@ -70,6 +104,8 @@ def check_if_enabled(src_file: str) -> bool:
     """
     with open(src_file, "r", encoding="utf-8") as runfile:
         for line in runfile:
+            # Allow flags at any indent level
+            line = line.lstrip()
             if line.startswith("#") and MARKER_KW in line:
                 line = line.replace(MARKER_KW, "")
                 line = line.replace("#", "")
@@ -178,9 +214,9 @@ def data_fetcher(func: callable) -> callable:
         if check_if_enabled(src_file):
             obj_name = func.__name__
             src_code = inspect.getsource(func)
-            pretty_print(src_code)
-            pretty_print(src_file, obj_name)
-            f_path = path_handler_for_tests(src_file)
+            if LOG_MODE == LOGGING_OPTS[1]:
+                log_info("Analyzing source code from: \n")
+                pretty_print(src_code)
             caller_name = ""
             try:
                 raise ScopeGetterException
@@ -188,42 +224,33 @@ def data_fetcher(func: callable) -> callable:
                 frame = sys.exc_info()[2].tb_frame.f_back
                 caller_name = frame.f_code.co_name
                 log_info(f"Obtained stack trace: {expected}")
+                in_types = [type(arg) for arg in args]
+                signature = inspect.signature(func)
+                print(signature, in_types, type(signature), type(in_types))
 
             if "test_" in caller_name:
                 ret_val = func(*args, **kwargs)
                 log_info("Skipping since this is a test method")
+                return ret_val
             else:
-                ts_tup = timestamp()
-                params: tuple = (args, kwargs)
-                input_fn = write_cache(
-                    f_path, obj_name, INPUT_LBL, params, ts_tup[1])
-                log_info(f"input: {input_fn}")
-                ret_val = func(*args, **kwargs)
-                output_fn = write_cache(
-                    f_path, obj_name, OUTPUT_LBL, ret_val, ts_tup[1]
-                )
-                log_info(f"Output: {output_fn}")
-                in_types = [str(type(arg)) for arg in args]
                 kwarg_types = [str(type(arg)) for arg in kwargs]
-                # print(in_types, kwarg_types)
-                # print(inspect.signature(func))
-                metadata = {
-                    "name": obj_name,
-                    "timestamp_unix": ts_tup[1],
-                    "timestamp_human": ts_tup[0],
-                    "file": str(get_relative_path(src_file)),
-                    "file_path_parts": get_relative_path(src_file).parts,
-                    "docstring": inspect.getdoc(func),
-                    "in_types": in_types,
-                    "kwarg_types": kwarg_types,
-                    "out_type": str(type(ret_val)),
-                }
-
-                meta_fname = write_cache(
-                    f_path,
-                    obj_name, META_LABEL, metadata, ts_tup[1], meta=True
+                ts_tup = timestamp()
+                arg_dict = {}  # TODO: arg dictinonaty with types
+                out_dict = {}  # TODO: out dict with types
+                ret_val = func(*args, **kwargs)
+                call_obj = LoggedInstance(
+                    obj_name, ts_tup[1], ts_tup[0], caller_name,
+                    str(get_relative_path(src_file)),
+                    list(get_relative_path(src_file).parts),
+                    inspect.getdoc(func),
+                    arg_dict,
+                    out_dict,
+                    [*args, *kwargs],
+                    ret_val
                 )
-                log_info(f"Wrote info to:{meta_fname}")
+                call_path = store_instance(call_obj)
+                log_info(f"Fetched call, storing in: {call_path}")
+
                 return ret_val
         else:
             ret_val = func(*args, **kwargs)

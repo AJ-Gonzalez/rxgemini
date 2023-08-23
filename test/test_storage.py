@@ -55,7 +55,7 @@ class TestStorage(unittest.TestCase):
                                   ts_var[1], ts_var[0],
                                   "sample_caller", "main.py", [
                                   ],
-                                  test_str, {}, {}, {}, [], True)
+                                  test_str, {}, {}, [], True)
         test_var = store_instance(inst_var)
         self.assertIsInstance(test_var, str)
         os.remove(test_var)

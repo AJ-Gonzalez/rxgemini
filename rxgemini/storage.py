@@ -35,9 +35,8 @@ class LoggedInstance:
     file: str
     file_path_parts: list
     docstring: str
-    arg_dict: dict
-    kwarg_dict: dict
-    out_dict: dict
+    expected_in_types: dict
+    out_type: type
     call_contents: list
     return_content: Any
 
