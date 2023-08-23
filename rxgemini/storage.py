@@ -101,7 +101,7 @@ def store_instance(instance: LoggedInstance) -> str:
     Returns:
         str: Path where file was saved
     """
-    t_stamp = timestamp()[1]
+    t_stamp = str(timestamp()[1]).replace(".", "-")
     f_name = f"{t_stamp}{instance.obj_name}{EXT}"
     save_path = pathlib.Path(*instance.file_path_parts, f_name)
     with open(save_path, "wb") as file_data:
