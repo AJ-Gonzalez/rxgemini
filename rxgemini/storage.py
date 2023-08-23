@@ -56,7 +56,7 @@ def get_relative_path(absolute_path: str) -> pathlib.Path:
     return pathlib.Path(absolute_path).relative_to(cwd)
 
 
-def path_handler(src_name: str) -> str:
+def path_handler(src_name: str) -> pathlib.Path:
     """
     Handles paths for call storage
 
@@ -64,7 +64,7 @@ def path_handler(src_name: str) -> str:
         src_name (str): source file
 
     Returns:
-        str: save path for file
+        pathlib.Path: save path for file
     """
     file_name = str(pathlib.Path(src_name).name).replace(".py", "")
     cwd = pathlib.Path().cwd()
