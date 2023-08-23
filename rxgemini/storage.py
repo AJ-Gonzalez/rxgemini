@@ -56,7 +56,7 @@ def get_relative_path(absolute_path: str) -> pathlib.Path:
     return pathlib.Path(absolute_path).relative_to(cwd)
 
 
-def path_handler(src_name: str) -> str:
+def path_handler(src_name: str) -> pathlib.Path:
     """
     Handles paths for call storage
 
@@ -64,11 +64,11 @@ def path_handler(src_name: str) -> str:
         src_name (str): source file
 
     Returns:
-        str: save path for file
+        pathlib.Path: save path for file
     """
     file_name = str(pathlib.Path(src_name).name).replace(".py", "")
     cwd = pathlib.Path().cwd()
-    test_save_path = pathlib.Path(cwd, "tests", SAVE_DIR, file_name)
+    test_save_path = pathlib.Path(cwd, "test", SAVE_DIR, file_name)
     log_info(f"Save path is: {test_save_path}")
     pathlib.Path(test_save_path).mkdir(parents=True, exist_ok=True)
     return test_save_path
@@ -101,7 +101,7 @@ def store_instance(instance: LoggedInstance) -> str:
     Returns:
         str: Path where file was saved
     """
-    t_stamp = timestamp()[1]
+    t_stamp = str(timestamp()[1]).replace(".", "-")
     f_name = f"{t_stamp}{instance.obj_name}{EXT}"
     save_path = pathlib.Path(*instance.file_path_parts, f_name)
     with open(save_path, "wb") as file_data:
