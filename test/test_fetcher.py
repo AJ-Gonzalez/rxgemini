@@ -23,7 +23,7 @@ def no_args():
     return None
 
 
-def one_arg(sample_arg: Any):
+def one_arg(sample_arg: Any) -> Any:
     """
 
     Test function with one sample positional argument
@@ -37,16 +37,47 @@ def one_arg(sample_arg: Any):
     return sample_arg
 
 
-def multi_arg(sample_arg: str, sample_other_arg: int):
+def multi_arg(sample_arg: str, sample_other_arg: int) -> tuple:
     """
 
-    Test function with one sample positional argument
+    Test function with multiple positional arguments
 
     Args:
-        sample_arg (Any): Sample positional arg
+        sample_arg (str): Sample Arg
+        sample_other_arg (int): sample arg
 
     Returns:
-        Any : same value
+        _type_: _description_
+    """
+    return (sample_arg, sample_other_arg)
+
+
+def multi_kwarg(
+        sample_arg: str = "sample", sample_other_arg: int = 155) -> tuple:
+    """
+    Test function with multiple kewyword arguments
+
+    Args:
+        sample_arg (str, optional): Sample arg. Defaults to "sample".
+        sample_other_arg (int, optional): Sample arg. Defaults to 155.
+
+    Returns:
+        tuple : sample
+    """
+    return (sample_arg, sample_other_arg)
+
+
+def mix_arg_kwarg(
+        sample_arg: str = "sample", sample_other_arg: int = 155) -> tuple:
+    """
+    Test function with mix positional and keyword arguments
+
+    Args:
+        sample_arg (str, optional): Sample arg. Defaults to "sample".
+        sample_other_arg (int, optional): Sample arg. Defaults to 155.
+
+    Returns:
+        tuple: sample
     """
     return (sample_arg, sample_other_arg)
 
