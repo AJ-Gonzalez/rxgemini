@@ -50,8 +50,6 @@ class TestFetcher(unittest.TestCase):
             return False
         args = ["a", 1]
         in_types = [type(arg) for arg in args]
-        val0 = "(param0: str, param1: int) -> bool"
-        val1 = ["<class 'str'>", "<class 'int'>"]
         handler = in_types_handler(inspect.signature(sample_func), in_types)
         print(handler)
 
