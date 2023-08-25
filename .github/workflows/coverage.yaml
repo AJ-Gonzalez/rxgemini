@@ -1,4 +1,4 @@
-name: Unit Tests
+name: Code Coverage
 
 on: [push]
 
@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+        python-version: ["3.11"]
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
@@ -17,8 +17,9 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pylint
+        pip install pylint coverage
         pip install -r requirements.txt
-    - name: Running unittest module
+    - name: Run Coverage Analysis
       run: |
-        python3 -m unittest
+        python3 -m coverage run -m unittest
+        python -m coverage report
