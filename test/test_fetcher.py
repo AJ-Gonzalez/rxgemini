@@ -8,7 +8,8 @@ from typing import Any
 from rxgemini.fetcher import (
     path_handler_for_tests,
     data_fetcher,
-    in_types_handler)
+    in_types_handler,
+    call_organizer)
 
 # Testbench functions
 
@@ -207,13 +208,15 @@ class TestFetcher(unittest.TestCase):
         """
         Tests call values organizer
         """
-        pass
+        # check against None
+        self.assertIsNot(call_organizer("a", {}), None)
 
     def test_call_organizer_regarding_methods(self):
         """
         Tests call values organizer
         """
-        pass
+        # check against None
+        self.assertIsNot(call_organizer("a", {}), None)
 
 
 if __name__ == "__main__":
