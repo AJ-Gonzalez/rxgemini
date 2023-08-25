@@ -3,11 +3,52 @@
 import unittest
 import pathlib
 import inspect
+from typing import Any
 
 from rxgemini.fetcher import (
     path_handler_for_tests,
     data_fetcher,
     in_types_handler)
+
+# Testbench functions
+
+
+def no_args():
+    """
+    Test function with no args, kwargs, or anything.
+
+    Returns:
+        None: Literally none
+    """
+    return None
+
+
+def one_arg(sample_arg: Any):
+    """
+
+    Test function with one sample positional argument
+
+    Args:
+        sample_arg (Any): Sample positional arg
+
+    Returns:
+        Any : same value
+    """
+    return sample_arg
+
+
+def multi_arg(sample_arg: str, sample_other_arg: int):
+    """
+
+    Test function with one sample positional argument
+
+    Args:
+        sample_arg (Any): Sample positional arg
+
+    Returns:
+        Any : same value
+    """
+    return (sample_arg, sample_other_arg)
 
 
 class TestFetcher(unittest.TestCase):
@@ -52,6 +93,12 @@ class TestFetcher(unittest.TestCase):
         in_types = [type(arg) for arg in args]
         handler = in_types_handler(inspect.signature(sample_func), in_types)
         print(handler)
+
+    def test_call_organizer_regarding_fucntions(self):
+        """
+        Tests call values organizer
+        """
+        pass
 
 
 if __name__ == "__main__":

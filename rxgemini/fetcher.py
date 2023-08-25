@@ -29,6 +29,10 @@ META_LABEL = CONFIG["METADATA_SUFFIX"]
 LOG_MODE = CONFIG["LOG_MODE"]
 
 
+def call_organizer(args, kwargs):
+    return None
+
+
 def in_types_handler(
         signature: inspect.Signature,
         call_types: list) -> Tuple[dict]:
