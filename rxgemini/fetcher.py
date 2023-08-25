@@ -32,6 +32,7 @@ LOG_MODE = CONFIG["LOG_MODE"]
 def in_types_handler(
         signature: inspect.Signature,
         call_types: list) -> Tuple[dict]:
+    # This needs to be refactored, deprecating for now, working on new idea
     keys = [key for key in signature.parameters]
     actual_types_dict = {}
     expected_types_dict = {}
@@ -42,6 +43,7 @@ def in_types_handler(
             log_warning(f"Parameter {key} has no type annotation!")
             expected_types_dict[key] = Any
         else:
+            # What I I convert all args in call to kwargs and double unpack
             # The variable is left for logging and legibility
             expected_param_type = param_str.split(":")[1].strip()
             expected_types_dict[key] = eval(expected_param_type)
