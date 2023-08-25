@@ -203,7 +203,13 @@ class TestFetcher(unittest.TestCase):
         handler = in_types_handler(inspect.signature(sample_func), in_types)
         print(handler)
 
-    def test_call_organizer_regarding_fucntions(self):
+    def test_call_organizer_regarding_functions(self):
+        """
+        Tests call values organizer
+        """
+        pass
+
+    def test_call_organizer_regarding_methods(self):
         """
         Tests call values organizer
         """
