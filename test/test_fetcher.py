@@ -206,17 +206,28 @@ class TestFetcher(unittest.TestCase):
 
     def test_call_organizer_regarding_functions(self):
         """
-        Tests call values organizer
+        Tests call values organizer on fucntion calls
         """
         # check against None
-        self.assertIsNot(call_organizer("a", {}), None)
+        sig = inspect.signature(no_args)
+        print(sig)
+        self.assertIsNot(call_organizer(sig, [], {}), None)
+        self.assertIsInstance(call_organizer(sig, [], {}), dict)
+        result = call_organizer(sig, [], {})
+        self.assertEqual(len(result), 2)
 
     def test_call_organizer_regarding_methods(self):
         """
-        Tests call values organizer
+        Tests call values organizer on method calls
         """
         # check against None
-        self.assertIsNot(call_organizer("a", {}), None)
+        obj = SampleMethodsClass()
+        sig = inspect.signature(obj.no_args)
+        print(sig, obj)
+        self.assertIsNot(call_organizer(sig, [], {}), None)
+        self.assertIsInstance(call_organizer(sig, [], {}), dict)
+        result = call_organizer(sig, [], {})
+        self.assertEqual(len(result), 2)
 
 
 if __name__ == "__main__":

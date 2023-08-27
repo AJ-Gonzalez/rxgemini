@@ -29,8 +29,23 @@ META_LABEL = CONFIG["METADATA_SUFFIX"]
 LOG_MODE = CONFIG["LOG_MODE"]
 
 
-def call_organizer(args, kwargs):
-    return None
+def call_organizer(
+        signature: inspect.Signature,
+        args: list,
+        kwargs: dict) -> dict:
+    """
+    Args:
+        signature (inspect.Signature): func/method signature
+        args (list): positional args from func/method
+        kwargs (dict): keyword args from func/method
+
+    Returns:
+        dict: function input values by argument, function expected types
+    """
+    res_dict: dict = {}
+    log_info(f"Recieved signature: {signature}")
+    log_info(f"Call with args: {args}  and kwargs: {kwargs}")
+    return res_dict
 
 
 def in_types_handler(
