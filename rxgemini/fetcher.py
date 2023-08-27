@@ -51,8 +51,8 @@ def call_organizer(
         res_dict["IN_vals"] = {}
         res_dict["IN_types"] = {}
         res_dict["expected_types"] = {}
-
-    return res_dict
+        log_info("Func/method has no parameters and no return.")
+        return res_dict
 
 
 def in_types_handler(
