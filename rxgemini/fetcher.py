@@ -40,11 +40,18 @@ def call_organizer(
         kwargs (dict): keyword args from func/method
 
     Returns:
-        dict: function input values by argument, function expected types
+        dict: function input values by argument, function actual types
+              function expected types
     """
-    res_dict: dict = {}
     log_info(f"Recieved signature: {signature}")
     log_info(f"Call with args: {args}  and kwargs: {kwargs}")
+    res_dict: dict = {}
+    sig_string = str(signature).strip()
+    if sig_string == "()":
+        res_dict["IN_vals"] = {}
+        res_dict["IN_types"] = {}
+        res_dict["expected_types"] = {}
+
     return res_dict
 
 

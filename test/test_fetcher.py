@@ -214,7 +214,8 @@ class TestFetcher(unittest.TestCase):
         self.assertIsNot(call_organizer(sig, [], {}), None)
         self.assertIsInstance(call_organizer(sig, [], {}), dict)
         result = call_organizer(sig, [], {})
-        self.assertEqual(len(result), 2)
+        # Confirm 3 items in dict
+        self.assertEqual(len(result), 3)
 
     def test_call_organizer_regarding_methods(self):
         """
@@ -227,7 +228,8 @@ class TestFetcher(unittest.TestCase):
         self.assertIsNot(call_organizer(sig, [], {}), None)
         self.assertIsInstance(call_organizer(sig, [], {}), dict)
         result = call_organizer(sig, [], {})
-        self.assertEqual(len(result), 2)
+        # Confirm 3 items in dict
+        self.assertEqual(len(result), 3)
 
 
 if __name__ == "__main__":
