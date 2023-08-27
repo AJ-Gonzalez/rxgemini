@@ -204,16 +204,25 @@ class TestFetcher(unittest.TestCase):
         handler = in_types_handler(inspect.signature(sample_func), in_types)
         print(handler)
 
-    def test_call_organizer_regarding_functions(self):
+    def test_call_organizer_regarding_noarg_functions(self):
         """
         Tests call values organizer on fucntion calls
         """
         # check against None
         sig = inspect.signature(no_args)
-        print(sig)
         self.assertIsNot(call_organizer(sig, [], {}), None)
         self.assertIsInstance(call_organizer(sig, [], {}), dict)
         result = call_organizer(sig, [], {})
+        # Confirm 3 items in dict
+        self.assertEqual(len(result), 3)
+
+    def test_call_organizer_regarding_one_arg_functions(self):
+        """
+        Tests call values organizer on fucntion calls
+        """
+        # check against None
+        sig = inspect.signature(one_arg)
+        result = call_organizer(sig, sig, {})
         # Confirm 3 items in dict
         self.assertEqual(len(result), 3)
 

@@ -29,6 +29,11 @@ META_LABEL = CONFIG["METADATA_SUFFIX"]
 LOG_MODE = CONFIG["LOG_MODE"]
 
 
+def data_dump(func: callable):
+    print("#####\n", inspect.signature(func), inspect.getargs(
+        func.__code__), inspect.get_annotations(func))
+
+
 def call_organizer(
         signature: inspect.Signature,
         args: list,
@@ -53,6 +58,8 @@ def call_organizer(
         res_dict["expected_types"] = {}
         log_info("Func/method has no parameters and no return.")
         return res_dict
+    if "->" in sig_string:
+        pass
 
 
 def in_types_handler(
@@ -252,16 +259,13 @@ def data_fetcher(func: callable) -> callable:
                 frame = sys.exc_info()[2].tb_frame.f_back
                 caller_name = frame.f_code.co_name
                 log_info(f"Obtained stack trace: {expected}")
-                in_types = [type(arg) for arg in args]
-                signature = inspect.signature(func)
-                print(signature, in_types, type(signature), type(in_types))
+                data_dump(func)
 
             if "test_" in caller_name:
                 ret_val = func(*args, **kwargs)
                 log_info("Skipping since this is a test method")
                 return ret_val
             else:
-                kwarg_types = [str(type(arg)) for arg in kwargs]
                 ts_tup = timestamp()
                 arg_dict = {}  # TODO: arg dictinonaty with types
                 out_dict = {}  # TODO: out dict with types
