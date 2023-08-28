@@ -94,6 +94,7 @@ class SampleMethodsClass:
     def __init__(self):
         self.sample_const: int = 777
 
+    @data_fetcher
     def no_args(self):
         """
         Test function with no args, kwargs, or anything.
@@ -190,6 +191,10 @@ class TestFetcher(unittest.TestCase):
         value = sample_func("a", 1)
         # Confirms decorator does not alter functionality
         self.assertEqual(value, True)
+        obj = SampleMethodsClass()
+        value = obj.no_args()
+        # Confirms decorator does not alter functionality
+        self.assertEqual(value, None)
 
     def test_in_types_handler(self):
         """
@@ -224,20 +229,6 @@ class TestFetcher(unittest.TestCase):
         # Confirm 3 items in dict
         self.assertEqual(len(result), 3)
         result = call_data_handler(one_arg, [], {"one_arg": 22})
-        # Confirm 3 items in dict
-        self.assertEqual(len(result), 3)
-
-    def test_call_data_handler_regarding_methods(self):
-        """
-        Tests call values organizer on method calls
-        """
-        # check against None
-        obj = SampleMethodsClass()
-        sig = inspect.signature(obj.no_args)
-        print(sig, obj)
-        self.assertIsNot(call_data_handler(obj.no_args, [], {}), None)
-        self.assertIsInstance(call_data_handler(obj.no_args, [], {}), dict)
-        result = call_data_handler(obj.no_args, [], {})
         # Confirm 3 items in dict
         self.assertEqual(len(result), 3)
 

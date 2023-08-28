@@ -56,6 +56,8 @@ def call_data_handler(
               function expected types
     """
     signature = inspect.signature(func)
+    if "self" in str(signature):
+        log_info("Working with method")
     log_info(f"Recieved signature: {signature} from {func.__name__}")
     log_info(f"Call with args: {args}  and kwargs: {kwargs}")
     try:
