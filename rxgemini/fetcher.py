@@ -30,17 +30,24 @@ LOG_MODE = CONFIG["LOG_MODE"]
 
 
 def data_dump(func: callable):
-    print("#####\n", inspect.signature(func), inspect.getargs(
-        func.__code__), inspect.get_annotations(func))
+    print("#####\n", inspect.signature(func))
+    print(inspect.getargs(func.__code__))
+    expected_types: dict = inspect.get_annotations(func)
+    print(expected_types)
 
 
-def call_organizer(
-        signature: inspect.Signature,
+def call_data_handler(
+        func: callable,
         args: list,
         kwargs: dict) -> dict:
     """
+    Handler for func/method call data,
+    Takes in the func, args, and kwargs
+    Extracts expected types, recieved types,
+    and recieved values.
+
     Args:
-        signature (inspect.Signature): func/method signature
+        func (callable): func/method
         args (list): positional args from func/method
         kwargs (dict): keyword args from func/method
 
@@ -48,18 +55,41 @@ def call_organizer(
         dict: function input values by argument, function actual types
               function expected types
     """
+    signature = inspect.signature(func)
     log_info(f"Recieved signature: {signature}")
     log_info(f"Call with args: {args}  and kwargs: {kwargs}")
+    expected_types: dict = inspect.get_annotations(func)
+    values = {}
+    print("##########", values)
+    for idx, key in enumerate(expected_types):
+        if key != "return":
+            log_info(f"Checking for parameter: {key}")
+            try:
+                param: Any = kwargs[key]
+                log_info(f"Keyword arg value found: {param}")
+                values[key] = param
+            except KeyError as ex_msg:
+                log_info(f"{ex_msg} is is a positional arg.")
+                try:
+                    values[key] = args[idx]
+                except IndexError as ex_message:
+                    log_info(
+                        f"No positional args or all were scanned {ex_message}")
+
     res_dict: dict = {}
+    res_dict["expected_types"] = expected_types
+    res_dict["IN_vals"] = values
     sig_string = str(signature).strip()
     if sig_string == "()":
         res_dict["IN_vals"] = {}
         res_dict["IN_types"] = {}
-        res_dict["expected_types"] = {}
         log_info("Func/method has no parameters and no return.")
         return res_dict
     if "->" in sig_string:
-        pass
+        log_info(f"Func/method has return: {expected_types['return']}")
+        res_dict["IN_types"] = {}
+        return res_dict
+    return res_dict
 
 
 def in_types_handler(

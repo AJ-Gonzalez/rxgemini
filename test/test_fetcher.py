@@ -9,7 +9,7 @@ from rxgemini.fetcher import (
     path_handler_for_tests,
     data_fetcher,
     in_types_handler,
-    call_organizer)
+    call_data_handler)
 
 # Testbench functions
 
@@ -204,29 +204,30 @@ class TestFetcher(unittest.TestCase):
         handler = in_types_handler(inspect.signature(sample_func), in_types)
         print(handler)
 
-    def test_call_organizer_regarding_noarg_functions(self):
+    def test_call_data_handler_regarding_noarg_functions(self):
         """
         Tests call values organizer on fucntion calls
         """
         # check against None
-        sig = inspect.signature(no_args)
-        self.assertIsNot(call_organizer(sig, [], {}), None)
-        self.assertIsInstance(call_organizer(sig, [], {}), dict)
-        result = call_organizer(sig, [], {})
+        self.assertIsNot(call_data_handler(no_args, [], {}), None)
+        self.assertIsInstance(call_data_handler(no_args, [], {}), dict)
+        result = call_data_handler(no_args, [], {})
         # Confirm 3 items in dict
         self.assertEqual(len(result), 3)
 
-    def test_call_organizer_regarding_one_arg_functions(self):
+    def test_call_data_handler_regarding_one_arg_functions(self):
         """
         Tests call values organizer on fucntion calls
         """
         # check against None
-        sig = inspect.signature(one_arg)
-        result = call_organizer(sig, sig, {})
+        result = call_data_handler(one_arg, [22], {})
+        # Confirm 3 items in dict
+        self.assertEqual(len(result), 3)
+        result = call_data_handler(one_arg, [], {"one_arg": 22})
         # Confirm 3 items in dict
         self.assertEqual(len(result), 3)
 
-    def test_call_organizer_regarding_methods(self):
+    def test_call_data_handler_regarding_methods(self):
         """
         Tests call values organizer on method calls
         """
@@ -234,9 +235,9 @@ class TestFetcher(unittest.TestCase):
         obj = SampleMethodsClass()
         sig = inspect.signature(obj.no_args)
         print(sig, obj)
-        self.assertIsNot(call_organizer(sig, [], {}), None)
-        self.assertIsInstance(call_organizer(sig, [], {}), dict)
-        result = call_organizer(sig, [], {})
+        self.assertIsNot(call_data_handler(obj.no_args, [], {}), None)
+        self.assertIsInstance(call_data_handler(obj.no_args, [], {}), dict)
+        result = call_data_handler(obj.no_args, [], {})
         # Confirm 3 items in dict
         self.assertEqual(len(result), 3)
 
