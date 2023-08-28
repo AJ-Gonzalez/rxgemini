@@ -58,7 +58,14 @@ def call_data_handler(
     signature = inspect.signature(func)
     log_info(f"Recieved signature: {signature} from {func.__name__}")
     log_info(f"Call with args: {args}  and kwargs: {kwargs}")
-    expected_types: dict = inspect.get_annotations(func)
+    try:
+        expected_types: dict = inspect.get_annotations(func)
+    except AttributeError as ex_msg:
+        log_warning(f"Running on python version <3.10 since: {ex_msg}")
+        log_warning("Using legacy method")
+        print(inspect.getmembers(func))
+        raise AttributeError
+
     values = {}
     print("##########", values)
     for idx, key in enumerate(expected_types):
