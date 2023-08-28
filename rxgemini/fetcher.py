@@ -281,27 +281,24 @@ def data_fetcher(func: callable) -> callable:
                 frame = sys.exc_info()[2].tb_frame.f_back
                 caller_name = frame.f_code.co_name
                 log_info(f"Obtained stack trace: {expected}")
-                data_dump(func)
-
+                fn_data: dict = call_data_handler(func, args, kwargs)
             if "test_" in caller_name:
                 ret_val = func(*args, **kwargs)
                 log_info("Skipping since this is a test method")
                 return ret_val
             else:
                 ts_tup = timestamp()
-                arg_dict = {}  # TODO: arg dictinonaty with types
-                out_dict = {}  # TODO: out dict with types
                 ret_val = func(*args, **kwargs)
                 call_obj = LoggedInstance(
-                    obj_name, ts_tup[1], ts_tup[0], caller_name,
-                    str(get_relative_path(src_file)),
-                    list(get_relative_path(src_file).parts),
+                    obj_name, ts_tup[1], ts_tup[0],
+                    caller_name, get_relative_path(src_file),
+                    get_relative_path(
+                        src_file).parts,
                     inspect.getdoc(func),
-                    arg_dict,
-                    out_dict,
-                    [*args, *kwargs],
-                    ret_val
-                )
+                    fn_data["expected_types"],
+                    fn_data["call_types"],
+                    fn_data["in_vals"], ret_val)
+                print(call_obj)
                 call_path = store_instance(call_obj)
                 log_info(f"Fetched call, storing in: {call_path}")
 
