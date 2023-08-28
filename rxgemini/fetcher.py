@@ -60,7 +60,6 @@ def call_data_handler(
     log_info(f"Call with args: {args}  and kwargs: {kwargs}")
     try:
         expected_types: dict = inspect.get_annotations(func)
-        print(dict(inspect.getmembers(func)[0][1]))
     except AttributeError as ex_msg:
         log_warning(f"Running on python version <3.10 since: {ex_msg}")
         log_warning("Using legacy method")
@@ -70,7 +69,6 @@ def call_data_handler(
         expected_types: dict = members[0][1]
 
     values = {}
-    print("##########", values)
     for idx, key in enumerate(expected_types):
         if key != "return":
             log_info(f"Checking for parameter: {key}")
