@@ -78,10 +78,9 @@ def call_data_handler(
 
     res_dict: dict = {}
     res_dict["expected_types"] = expected_types
-    res_dict["IN_vals"] = values
-    res_dict["IN_types"] = {key: type(value)
-                            for key, value in expected_types.items()}
-    print(res_dict)
+    res_dict["in_vals"] = values
+    res_dict["call_types"] = {key: type(value)
+                              for key, value in expected_types.items()}
     return res_dict
 
 
