@@ -58,15 +58,16 @@ def call_data_handler(
     signature = inspect.signature(func)
     log_info(f"Recieved signature: {signature} from {func.__name__}")
     log_info(f"Call with args: {args}  and kwargs: {kwargs}")
-    print(inspect.getmembers(func)[0][1])
     try:
         expected_types: dict = inspect.get_annotations(func)
+        print(dict(inspect.getmembers(func)[0][1]))
     except AttributeError as ex_msg:
         log_warning(f"Running on python version <3.10 since: {ex_msg}")
         log_warning("Using legacy method")
         # Annotations are the fist member of the function object members
         # It is a tuple in which the first member is just "__annotations__"
-        expected_types: dict = dict(inspect.getmembers(func)[0][1])
+        members = inspect.getmembers(func)
+        expected_types: dict = members[0][1]
 
     values = {}
     print("##########", values)
