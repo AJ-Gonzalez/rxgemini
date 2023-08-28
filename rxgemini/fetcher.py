@@ -56,7 +56,7 @@ def call_data_handler(
               function expected types
     """
     signature = inspect.signature(func)
-    log_info(f"Recieved signature: {signature}")
+    log_info(f"Recieved signature: {signature} from {func.__name__}")
     log_info(f"Call with args: {args}  and kwargs: {kwargs}")
     expected_types: dict = inspect.get_annotations(func)
     values = {}
@@ -79,16 +79,9 @@ def call_data_handler(
     res_dict: dict = {}
     res_dict["expected_types"] = expected_types
     res_dict["IN_vals"] = values
-    sig_string = str(signature).strip()
-    if sig_string == "()":
-        res_dict["IN_vals"] = {}
-        res_dict["IN_types"] = {}
-        log_info("Func/method has no parameters and no return.")
-        return res_dict
-    if "->" in sig_string:
-        log_info(f"Func/method has return: {expected_types['return']}")
-        res_dict["IN_types"] = {}
-        return res_dict
+    res_dict["IN_types"] = {key: type(value)
+                            for key, value in expected_types.items()}
+    print(res_dict)
     return res_dict
 
 
