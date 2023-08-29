@@ -4,10 +4,9 @@ import functools
 import inspect
 import pathlib
 import sys
-import json
-import pickle
+
 from datetime import datetime
-from typing import Union, Optional, Any
+from typing import Any
 
 
 from rxgemini.configurator import config_checker
@@ -141,7 +140,7 @@ def check_if_enabled(src_file: str) -> bool:
                     if fetcher_setting == TAGS["FETCHER"][1]:
                         log_info("Starting data fetch")
                         return True
-                    elif fetcher_setting == TAGS["FETCHER"][2]:
+                    if fetcher_setting == TAGS["FETCHER"][2]:
                         log_info("Skipping data fetch")
                         return False
     log_warning("No explicit keyword found, skipping fetch by default")
@@ -164,46 +163,6 @@ def path_handler_for_tests(src_name: str) -> str:
     log_info(f"Save path for data: {test_save_path}")
     pathlib.Path(test_save_path).mkdir(parents=True, exist_ok=True)
     return test_save_path
-
-    # make this windows and unix compatible
-
-
-def write_cache(
-    f_path: str,
-    obj_name: str,
-    role_label: str,
-    cache_data: Union[str, tuple],
-    t_stamp: str,
-    meta: Optional[bool] = False,
-) -> pathlib.Path:
-    """
-    Cahce writer, (will be replaced in upcoming refactor)
-
-    Args:
-        f_path (str): _description_
-        obj_name (str): _description_
-        role_label (str): _description_
-        cache_data (Union[str, tuple]): _description_
-        t_stamp (str): _description_
-        meta (Optional[bool], optional): _description_. Defaults to False.
-
-    Returns:
-        pathlib.Path:  save path
-    """
-    if meta:
-        # need to figure out how to do everything path related with pathlib
-        f_name = f"{t_stamp}{obj_name}{role_label}.json"
-        save_path = pathlib.Path(f_path, f_name)
-        if not pathlib.Path(save_path).exists():
-            with open(save_path, "w", encoding="utf-8") as cache:
-                json.dump(cache_data, cache, indent=4)
-        return save_path
-    else:
-        f_name = f"{t_stamp}{obj_name}{role_label}.pickle"
-        save_path = pathlib.Path(f_path, f_name)
-        with open(save_path, "wb") as cache:
-            pickle.dump(cache_data, cache)
-        return save_path
 
 
 def get_relative_path(absolute_path: str) -> pathlib.Path:
@@ -255,26 +214,25 @@ def data_fetcher(func: callable) -> callable:
                 ret_val = func(*args, **kwargs)
                 log_info("Skipping since this is a test method")
                 return ret_val
-            else:
-                fn_data: dict = call_data_handler(func, args, kwargs)
-                ts_tup = timestamp()
-                ret_val = func(*args, **kwargs)
-                call_obj = LoggedInstance(
-                    obj_name, ts_tup[1], ts_tup[0],
-                    caller_name, get_relative_path(src_file),
-                    get_relative_path(
-                        src_file).parts,
-                    inspect.getdoc(func),
-                    fn_data["expected_types"],
-                    fn_data["call_types"],
-                    fn_data["in_vals"], ret_val)
-                print(call_obj)
-                call_path = store_instance(call_obj)
-                log_info(f"Fetched call, storing in: {call_path}")
 
-                return ret_val
-        else:
+            fn_data: dict = call_data_handler(func, args, kwargs)
+            ts_tup = timestamp()
             ret_val = func(*args, **kwargs)
+            call_obj = LoggedInstance(
+                obj_name, ts_tup[1], ts_tup[0],
+                caller_name, get_relative_path(src_file),
+                get_relative_path(
+                    src_file).parts,
+                inspect.getdoc(func),
+                fn_data["expected_types"],
+                fn_data["call_types"],
+                fn_data["in_vals"], ret_val)
+            print(call_obj)
+            call_path = store_instance(call_obj)
+            log_info(f"Fetched call, storing in: {call_path}")
             return ret_val
+
+        ret_val = func(*args, **kwargs)
+        return ret_val
 
     return wrapper_fetcher
