@@ -1,6 +1,5 @@
 """Data fetcher module for rxgemini"""
-# pylint: skip-file
-# Skipping file because of pending refactor
+
 import functools
 import inspect
 import pathlib
@@ -8,7 +7,7 @@ import sys
 import json
 import pickle
 from datetime import datetime
-from typing import Union, Optional, Tuple, Any
+from typing import Union, Optional, Any
 
 
 from rxgemini.configurator import config_checker
@@ -27,13 +26,6 @@ INPUT_LBL = CONFIG["INPUT_SUFFIX"]
 OUTPUT_LBL = CONFIG["OUTPUT_SUFFIX"]
 META_LABEL = CONFIG["METADATA_SUFFIX"]
 LOG_MODE = CONFIG["LOG_MODE"]
-
-
-def data_dump(func: callable):
-    print("#####\n", inspect.signature(func))
-    print(inspect.getargs(func.__code__))
-    expected_types: dict = inspect.get_annotations(func)
-    print(expected_types)
 
 
 def call_data_handler(
@@ -92,39 +84,6 @@ def call_data_handler(
     res_dict["call_types"] = {key: type(value)
                               for key, value in expected_types.items()}
     return res_dict
-
-
-def in_types_handler(
-        signature: inspect.Signature,
-        call_types: list) -> Tuple[dict]:
-    # This needs to be refactored, deprecating for now, working on new idea
-    keys = [key for key in signature.parameters]
-    actual_types_dict = {}
-    expected_types_dict = {}
-    cursor: int = 0
-    for key in keys:
-        param_str = str(signature.parameters[key])
-        if ":" not in param_str:
-            log_warning(f"Parameter {key} has no type annotation!")
-            expected_types_dict[key] = Any
-        else:
-            # What I I convert all args in call to kwargs and double unpack
-            # The variable is left for logging and legibility
-            expected_param_type = param_str.split(":")[1].strip()
-            expected_types_dict[key] = eval(expected_param_type)
-            log_info(f"Parameter {key} expects {expected_param_type}")
-
-        try:
-            actual_type = call_types[cursor]
-            actual_types_dict[key] = actual_type
-        except IndexError as err_msg:
-            actual_types_dict[key] = type(None)
-            log_warning(f"Parameter {key} not in call: {err_msg}")
-
-        # Do not move cursor
-        cursor += 1
-
-    return (expected_types_dict, actual_types_dict)
 
 
 def get_arg_vars(func: callable) -> dict:
@@ -297,6 +256,7 @@ def data_fetcher(func: callable) -> callable:
                 log_info("Skipping since this is a test method")
                 return ret_val
             else:
+                fn_data: dict = call_data_handler(func, args, kwargs)
                 ts_tup = timestamp()
                 ret_val = func(*args, **kwargs)
                 call_obj = LoggedInstance(

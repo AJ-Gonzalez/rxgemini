@@ -2,13 +2,11 @@
 
 import unittest
 import pathlib
-import inspect
 from typing import Any
 
 from rxgemini.fetcher import (
     path_handler_for_tests,
     data_fetcher,
-    in_types_handler,
     call_data_handler)
 
 # Testbench functions
@@ -195,19 +193,6 @@ class TestFetcher(unittest.TestCase):
         value = obj.no_args()
         # Confirms decorator does not alter functionality
         self.assertEqual(value, None)
-
-    def test_in_types_handler(self):
-        """
-        Tests handler for input types
-        """
-        def sample_func(param0: str, param1: int) -> bool:
-            if param0 == "a" and param1 != 0:
-                return True
-            return False
-        args = ["a", 1]
-        in_types = [type(arg) for arg in args]
-        handler = in_types_handler(inspect.signature(sample_func), in_types)
-        print(handler)
 
     def test_call_data_handler_regarding_noarg_functions(self):
         """
