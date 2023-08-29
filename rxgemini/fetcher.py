@@ -1,19 +1,19 @@
 """Data fetcher module for rxgemini"""
-# pylint: skip-file
-# Skipping file because of pending refactor
+
 import functools
 import inspect
 import pathlib
 import sys
-import json
-import pickle
+
 from datetime import datetime
-from typing import Union, Optional
+from typing import Any
 
 
 from rxgemini.configurator import config_checker
 from rxgemini.errors import ScopeGetterException
 from rxgemini.log_handler import log_warning, log_info, pretty_print
+from rxgemini.storage import LoggedInstance, store_instance
+from rxgemini.constants import LOGGING_OPTS
 
 CONFIG = config_checker(internal=True)
 
@@ -24,6 +24,65 @@ SAVE_DIR = CONFIG["SAVE_DIRECTORY"]
 INPUT_LBL = CONFIG["INPUT_SUFFIX"]
 OUTPUT_LBL = CONFIG["OUTPUT_SUFFIX"]
 META_LABEL = CONFIG["METADATA_SUFFIX"]
+LOG_MODE = CONFIG["LOG_MODE"]
+
+
+def call_data_handler(
+        func: callable,
+        args: list,
+        kwargs: dict) -> dict:
+    """
+    Handler for func/method call data,
+    Takes in the func, args, and kwargs
+    Extracts expected types, recieved types,
+    and recieved values.
+
+    Args:
+        func (callable): func/method
+        args (list): positional args from func/method
+        kwargs (dict): keyword args from func/method
+
+    Returns:
+        dict: function input values by argument, function actual types
+              function expected types
+    """
+    signature = inspect.signature(func)
+    if "self" in str(signature):
+        log_info("Working with method")
+    log_info(f"Recieved signature: {signature} from {func.__name__}")
+    log_info(f"Call with args: {args}  and kwargs: {kwargs}")
+    try:
+        expected_types: dict = inspect.get_annotations(func)
+    except AttributeError as ex_msg:
+        log_warning(f"Running on python version <3.10 since: {ex_msg}")
+        log_warning("Using legacy method")
+        # Annotations are the fist member of the function object members
+        # It is a tuple in which the first member is just "__annotations__"
+        members = inspect.getmembers(func)
+        expected_types: dict = members[0][1]
+
+    values = {}
+    for idx, key in enumerate(expected_types):
+        if key != "return":
+            log_info(f"Checking for parameter: {key}")
+            try:
+                param: Any = kwargs[key]
+                log_info(f"Keyword arg value found: {param}")
+                values[key] = param
+            except KeyError as ex_msg:
+                log_info(f"{ex_msg} is is a positional arg.")
+                try:
+                    values[key] = args[idx]
+                except IndexError as ex_message:
+                    log_info(
+                        f"No positional args or all were scanned {ex_message}")
+
+    res_dict: dict = {}
+    res_dict["expected_types"] = expected_types
+    res_dict["in_vals"] = values
+    res_dict["call_types"] = {key: type(value)
+                              for key, value in expected_types.items()}
+    return res_dict
 
 
 def get_arg_vars(func: callable) -> dict:
@@ -70,6 +129,8 @@ def check_if_enabled(src_file: str) -> bool:
     """
     with open(src_file, "r", encoding="utf-8") as runfile:
         for line in runfile:
+            # Allow flags at any indent level
+            line = line.lstrip()
             if line.startswith("#") and MARKER_KW in line:
                 line = line.replace(MARKER_KW, "")
                 line = line.replace("#", "")
@@ -79,7 +140,7 @@ def check_if_enabled(src_file: str) -> bool:
                     if fetcher_setting == TAGS["FETCHER"][1]:
                         log_info("Starting data fetch")
                         return True
-                    elif fetcher_setting == TAGS["FETCHER"][2]:
+                    if fetcher_setting == TAGS["FETCHER"][2]:
                         log_info("Skipping data fetch")
                         return False
     log_warning("No explicit keyword found, skipping fetch by default")
@@ -102,46 +163,6 @@ def path_handler_for_tests(src_name: str) -> str:
     log_info(f"Save path for data: {test_save_path}")
     pathlib.Path(test_save_path).mkdir(parents=True, exist_ok=True)
     return test_save_path
-
-    # make this windows and unix compatible
-
-
-def write_cache(
-    f_path: str,
-    obj_name: str,
-    role_label: str,
-    cache_data: Union[str, tuple],
-    t_stamp: str,
-    meta: Optional[bool] = False,
-) -> pathlib.Path:
-    """
-    Cahce writer, (will be replaced in upcoming refactor)
-
-    Args:
-        f_path (str): _description_
-        obj_name (str): _description_
-        role_label (str): _description_
-        cache_data (Union[str, tuple]): _description_
-        t_stamp (str): _description_
-        meta (Optional[bool], optional): _description_. Defaults to False.
-
-    Returns:
-        pathlib.Path:  save path
-    """
-    if meta:
-        # need to figure out how to do everything path related with pathlib
-        f_name = f"{t_stamp}{obj_name}{role_label}.json"
-        save_path = pathlib.Path(f_path, f_name)
-        if not pathlib.Path(save_path).exists():
-            with open(save_path, "w", encoding="utf-8") as cache:
-                json.dump(cache_data, cache, indent=4)
-        return save_path
-    else:
-        f_name = f"{t_stamp}{obj_name}{role_label}.pickle"
-        save_path = pathlib.Path(f_path, f_name)
-        with open(save_path, "wb") as cache:
-            pickle.dump(cache_data, cache)
-        return save_path
 
 
 def get_relative_path(absolute_path: str) -> pathlib.Path:
@@ -178,9 +199,9 @@ def data_fetcher(func: callable) -> callable:
         if check_if_enabled(src_file):
             obj_name = func.__name__
             src_code = inspect.getsource(func)
-            pretty_print(src_code)
-            pretty_print(src_file, obj_name)
-            f_path = path_handler_for_tests(src_file)
+            if LOG_MODE == LOGGING_OPTS[1]:
+                log_info("Analyzing source code from: \n")
+                pretty_print(src_code)
             caller_name = ""
             try:
                 raise ScopeGetterException
@@ -188,45 +209,30 @@ def data_fetcher(func: callable) -> callable:
                 frame = sys.exc_info()[2].tb_frame.f_back
                 caller_name = frame.f_code.co_name
                 log_info(f"Obtained stack trace: {expected}")
-
+                fn_data: dict = call_data_handler(func, args, kwargs)
             if "test_" in caller_name:
                 ret_val = func(*args, **kwargs)
                 log_info("Skipping since this is a test method")
-            else:
-                ts_tup = timestamp()
-                params: tuple = (args, kwargs)
-                input_fn = write_cache(
-                    f_path, obj_name, INPUT_LBL, params, ts_tup[1])
-                log_info(f"input: {input_fn}")
-                ret_val = func(*args, **kwargs)
-                output_fn = write_cache(
-                    f_path, obj_name, OUTPUT_LBL, ret_val, ts_tup[1]
-                )
-                log_info(f"Output: {output_fn}")
-                in_types = [str(type(arg)) for arg in args]
-                kwarg_types = [str(type(arg)) for arg in kwargs]
-                # print(in_types, kwarg_types)
-                # print(inspect.signature(func))
-                metadata = {
-                    "name": obj_name,
-                    "timestamp_unix": ts_tup[1],
-                    "timestamp_human": ts_tup[0],
-                    "file": str(get_relative_path(src_file)),
-                    "file_path_parts": get_relative_path(src_file).parts,
-                    "docstring": inspect.getdoc(func),
-                    "in_types": in_types,
-                    "kwarg_types": kwarg_types,
-                    "out_type": str(type(ret_val)),
-                }
-
-                meta_fname = write_cache(
-                    f_path,
-                    obj_name, META_LABEL, metadata, ts_tup[1], meta=True
-                )
-                log_info(f"Wrote info to:{meta_fname}")
                 return ret_val
-        else:
+
+            fn_data: dict = call_data_handler(func, args, kwargs)
+            ts_tup = timestamp()
             ret_val = func(*args, **kwargs)
+            call_obj = LoggedInstance(
+                obj_name, ts_tup[1], ts_tup[0],
+                caller_name, get_relative_path(src_file),
+                get_relative_path(
+                    src_file).parts,
+                inspect.getdoc(func),
+                fn_data["expected_types"],
+                fn_data["call_types"],
+                fn_data["in_vals"], ret_val)
+            print(call_obj)
+            call_path = store_instance(call_obj)
+            log_info(f"Fetched call, storing in: {call_path}")
             return ret_val
+
+        ret_val = func(*args, **kwargs)
+        return ret_val
 
     return wrapper_fetcher
