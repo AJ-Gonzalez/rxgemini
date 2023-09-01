@@ -9,7 +9,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
           - name: Install Pytest
-            run: pip install pytest
+            run: pip install pytest pytest-cov
           - name: Run pytest
             run: python -m pytest --cov-report xml:coverage.xml
           - name: Get Cover 
