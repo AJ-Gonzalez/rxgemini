@@ -6,6 +6,8 @@ RX Gemini empowers developers, testers, and management to focus on features and 
 
 Cross platform and adaptable.
 
+> Experimental branch, release pending
+
 ## Current Features
 
 - Configuration generator
