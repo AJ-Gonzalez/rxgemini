@@ -55,3 +55,8 @@ def index_finder(args_content: dict) -> int:
     complexity_index = indices[exact_middle_index]
     log_info(f"Complexity index is: {complexity_index}")
     return complexity_index
+
+
+def instance_ranking(instances: list):
+    for file_str in instances:
+        print(file_str)
