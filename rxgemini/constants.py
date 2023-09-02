@@ -14,7 +14,9 @@ CFG_TEMPLATE: dict = {
     # quiet: only shows prompts and essential info
     "LOG_MODE": "pretty",
     "MARKER_KW": "RXGEMINI",
-    "TAGS": {"FETCHER": ["fetcher", "on", "off"]},
+    "TAGS": {
+        "FETCHER": ["fetcher", "on", "off"],
+        "DATA_MODE": ["datamode", "quick", "boundary", "full", "smart"]},
     "DELIMITERS": ["_about_", "_regarding_", "_evaluates_", "_ensures_"],
     "LOG_PREFIX": "[RX_GEMINI]",
     "SAVE_DIRECTORY": "test_dc"
