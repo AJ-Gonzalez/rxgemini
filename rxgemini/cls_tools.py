@@ -2,8 +2,23 @@
 
 import math
 import pickle
+from operator import itemgetter
 
 from rxgemini.log_handler import log_info
+from rxgemini.constants import ICI_TEMPLATE
+
+
+# i know this computationally sucks, but is the cost of not
+#  being able to manage numpy
+# dependencies within python versions, 
+# and I still wanna support 3.7.4 bc enterprise.
+def percentile(input, q):
+    # TODO: refator to remove imputs
+    data_sorted = sorted(input) # Sort in ascending order
+    
+    index = math.ceil(q / 100 * len(data_sorted))
+
+    return data_sorted[index]
 
 
 def index_finder(args_content: dict) -> int:
@@ -58,5 +73,10 @@ def index_finder(args_content: dict) -> int:
 
 
 def instance_ranking(instances: list):
-    for file_str in instances:
-        print(file_str)
+    print(ICI_TEMPLATE)
+    # TODO: Implement ranking from file name
+    rank_ls: list = [(int(file_str.split("_")[0]), file_str)
+                     for file_str in instances]
+    sorted_rankings = (sorted(rank_ls, key=itemgetter(0)))
+
+    print(rank_ls, sorted_rankings)

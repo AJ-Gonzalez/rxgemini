@@ -2,7 +2,7 @@
 
 import unittest
 
-from rxgemini.cls_tools import index_finder
+from rxgemini.cls_tools import index_finder, instance_ranking
 
 
 class TestClsTools(unittest.TestCase):
@@ -24,6 +24,12 @@ class TestClsTools(unittest.TestCase):
                 1, 2, 3, 5, 6, 3, 5, 6, 7, 78, 789, 000],
             "arg3": IOError}
         self.assertIsInstance(index_finder(sample_dict), int)
+
+    def test_instance_ranking(self):
+        """
+        Tests instance complexity ranker
+        """
+        self.assertEqual(instance_ranking(["23_hello", "11_world"]), None)
 
 
 if __name__ == "__main__":

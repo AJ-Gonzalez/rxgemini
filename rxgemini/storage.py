@@ -101,6 +101,7 @@ def store_instance(instance: LoggedInstance) -> str:
         str: Path where file was saved
     """
     t_stamp = str(timestamp()[1]).replace(".", "-")
+    # TODO: Reformat to include complexity index
     f_name = f"{t_stamp}{instance.obj_name}{EXT}"
     save_path = pathlib.Path(*instance.file_path_parts, f_name)
     with open(save_path, "wb") as file_data:
