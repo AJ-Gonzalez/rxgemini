@@ -9,13 +9,13 @@ from rxgemini.constants import ICI_TEMPLATE
 
 
 # i know this computationally sucks, but is the cost of not
-#  being able to manage numpy
-# dependencies within python versions, 
+# being able to manage numpy
+# dependencies within python versions,
 # and I still wanna support 3.7.4 bc enterprise.
 def percentile(input, q):
     # TODO: refator to remove imputs
-    data_sorted = sorted(input) # Sort in ascending order
-    
+    data_sorted = sorted(input)  # Sort in ascending order
+
     index = math.ceil(q / 100 * len(data_sorted))
 
     return data_sorted[index]
