@@ -82,7 +82,31 @@ def index_finder(args_content: dict) -> int:
     return complexity_index
 
 
-def instance_ranking(instances: list):
+def instance_ranking(instances: list) -> dict:
+    """
+    Ranks func/method call data by complexity.
+
+    Returns the following statistics for that func/method:
+        Key:   |  Value:
+        "50th" : 50th percentile complexity
+        "high" : Maximum complexity
+        "low"  : Minimum complexity
+        "90th" : 90th percentile complexity
+        "10th" : 10th percentile complexity
+        "70th" : 70th percentile complexity
+        "30th" : 30th percentile complexity
+        "whole": All complexities
+        "raw"  : Dictionary mapping complexities to
+                 .gmni data files.
+
+
+    Args:
+        instances (list): list of call files
+
+    Returns:
+        dict: Statistics dict
+    """
+
     print(ICI_TEMPLATE)
     # TODO: Implement ranking from file name
     rank_ls: list = [(int(file_str.split("_")[0]), file_str)
@@ -103,3 +127,4 @@ def instance_ranking(instances: list):
                   "whole": list(rank_dict),
                   "raw": rank_dict}
     print(stats_dict)
+    return stats_dict
