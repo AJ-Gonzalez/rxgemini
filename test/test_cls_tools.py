@@ -29,7 +29,11 @@ class TestClsTools(unittest.TestCase):
         """
         Tests instance complexity ranker
         """
-        self.assertEqual(instance_ranking(["23_hello", "11_world"]), None)
+        test_data = ["23_hello", "11_world", "5_hello", "1_world",
+                     "28_hello", "66_world", "133_hello", "50_world",
+                     "30_hello", "60_world", "90_hello", "68_world", 
+                     "2_hello", "1_world", "10_hello", "20_world"]
+        self.assertEqual(instance_ranking(test_data), None)
 
 
 if __name__ == "__main__":

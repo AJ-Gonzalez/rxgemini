@@ -12,11 +12,21 @@ from rxgemini.constants import ICI_TEMPLATE
 # being able to manage numpy
 # dependencies within python versions,
 # and I still wanna support 3.7.4 bc enterprise.
-def percentile(input, q):
-    # TODO: refator to remove imputs
-    data_sorted = sorted(input)  # Sort in ascending order
+def percentile(in_ls: list, percentile_var: float) -> list:
+    """
+    Returns a list with the desired percentile set
 
-    index = math.ceil(q / 100 * len(data_sorted))
+    Args:
+        in_ls (list): Input list
+        percentile_var (float): Percentile float
+
+    Returns:
+        list: percentile set
+    """
+    data_sorted = sorted(in_ls)  # Sort in ascending order
+    print(percentile_var)
+    index = math.ceil(percentile_var * len(data_sorted))
+    print(len(data_sorted), index)
 
     return data_sorted[index]
 
@@ -78,5 +88,18 @@ def instance_ranking(instances: list):
     rank_ls: list = [(int(file_str.split("_")[0]), file_str)
                      for file_str in instances]
     sorted_rankings = (sorted(rank_ls, key=itemgetter(0)))
-
-    print(rank_ls, sorted_rankings)
+    rank_dict: dict = {int(elm[0]): elm[1] for elm in sorted_rankings}
+    print(rank_dict)
+    deciles = [percentile(rank_dict, clx/10) for clx in range(0, 10)]
+    for idx, decile in enumerate(deciles):
+        print(idx, decile)
+    stats_dict = {"50th": percentile(rank_dict, 0.5),
+                  "high": max(rank_dict),
+                  "low": min(rank_dict),
+                  "90th": percentile(rank_dict, 0.9),
+                  "10th": percentile(rank_dict, 0.1),
+                  "70th": percentile(rank_dict, 0.7),
+                  "30th": percentile(rank_dict, 0.3),
+                  "whole": list(rank_dict),
+                  "raw": rank_dict}
+    print(stats_dict)
