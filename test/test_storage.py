@@ -42,7 +42,7 @@ class TestStorage(unittest.TestCase):
         test_var = path_handler("main.py")
         self.assertIsInstance(test_var, pathlib.Path)
 
-    def test_store_instance(self):
+    def test_store_instance_no_args(self):
         """
         Tests instance storage
         """
@@ -56,6 +56,28 @@ class TestStorage(unittest.TestCase):
                                   "sample_caller", "main.py", [
                                   ],
                                   test_str, {}, {}, {}, True)
+        test_var = store_instance(inst_var)
+        self.assertIsInstance(test_var, str)
+        os.remove(test_var)
+
+    def test_store_instance_with_args(self):
+        """
+        Tests instance storage
+        """
+        test_str = """
+        Sample muiltiline
+        string
+        """
+        ts_var = timestamp()
+        inst_var = LoggedInstance(
+            "sample_name",
+            ts_var[1], ts_var[0],
+            "sample_caller", "main.py", [],
+            test_str, {}, {},
+            {"arg0": 1234512345,
+             "arg1": {"b": False},
+             "arg2": "hello world, ground control to major tom"},
+            True)
         test_var = store_instance(inst_var)
         self.assertIsInstance(test_var, str)
         os.remove(test_var)

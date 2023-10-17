@@ -66,7 +66,7 @@ def index_finder(args_content: dict) -> int:
         int: complexity index
     """
     if len(args_content) == 0:
-        # Low complexity index for inputs
+        # Low complexity index for no arg inputs
         return 1
     indices = []
     for key, value in args_content.items():
