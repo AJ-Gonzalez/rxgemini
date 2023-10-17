@@ -113,7 +113,6 @@ def instance_ranking(instances: list) -> dict:
                      for file_str in instances]
     sorted_rankings = (sorted(rank_ls, key=itemgetter(0)))
     rank_dict: dict = {int(elm[0]): elm[1] for elm in sorted_rankings}
-    print(rank_dict)
     deciles = [percentile(rank_dict, clx/10) for clx in range(0, 10)]
     for idx, decile in enumerate(deciles):
         print(idx, decile)
@@ -126,5 +125,4 @@ def instance_ranking(instances: list) -> dict:
                   "30th": percentile(rank_dict, 0.3),
                   "whole": list(rank_dict),
                   "raw": rank_dict}
-    print(stats_dict)
     return stats_dict
