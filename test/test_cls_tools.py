@@ -2,8 +2,8 @@
 
 import unittest
 
-from rxgemini.cls_tools import index_finder, instance_ranking
 from rich import print as pprint
+from rxgemini.cls_tools import index_finder, instance_ranking
 
 
 class TestClsTools(unittest.TestCase):
