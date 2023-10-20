@@ -5,7 +5,6 @@ import pickle
 from operator import itemgetter
 
 from rxgemini.log_handler import log_info
-from rxgemini.constants import ICI_TEMPLATE
 
 
 # i know this computationally sucks, but is the cost of not
@@ -109,10 +108,7 @@ def instance_ranking(instances: list) -> dict:
     Returns:
         dict: Statistics dict
     """
-
-    print(ICI_TEMPLATE)
-    # TODO: Implement ranking from file name
-    rank_ls: list = [(int(file_str.split("_")[0]), file_str)
+    rank_ls: list = [(int(file_str.split("+")[0]), file_str)
                      for file_str in instances]
     sorted_rankings = (sorted(rank_ls, key=itemgetter(0)))
     rank_dict: dict = {int(elm[0]): elm[1] for elm in sorted_rankings}

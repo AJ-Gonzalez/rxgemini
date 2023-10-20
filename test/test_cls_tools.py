@@ -30,10 +30,10 @@ class TestClsTools(unittest.TestCase):
         """
         Tests instance complexity ranker
         """
-        test_data = ["23_hello", "11_world", "5_hello", "1_world",
-                     "28_hello", "66_world", "133_hello", "50_world",
-                     "30_hello", "60_world", "90_hello", "68_world",
-                     "2_hello", "1_world", "10_hello", "20_world"]
+        test_data = ["23+hello", "11+world", "5+hello", "1+world",
+                     "28+hello", "66+world", "133+hello", "50+world",
+                     "30+hello", "60+world", "90+hello", "68+world",
+                     "2+hello", "1+world", "10+hello", "20+world"]
         test_run = instance_ranking(test_data)
         pprint(test_run)
         self.assertIsInstance(test_run, dict)
@@ -46,23 +46,25 @@ class TestClsTools(unittest.TestCase):
             '70th': 66,
             '30th': 20,
             'whole': [
-                1, 2, 5, 10, 11, 20, 23, 28, 30, 50, 60, 66, 68, 90, 133],
+                1,
+                2,
+                5, 10, 11, 20, 23, 28, 30, 50, 60, 66, 68, 90, 133],
             'raw': {
-                1: '1_world',
-                2: '2_hello',
-                5: '5_hello',
-                10: '10_hello',
-                11: '11_world',
-                20: '20_world',
-                23: '23_hello',
-                28: '28_hello',
-                30: '30_hello',
-                50: '50_world',
-                60: '60_world',
-                66: '66_world',
-                68: '68_world',
-                90: '90_hello',
-                133: '133_hello'
+                1: '1+world',
+                2: '2+hello',
+                5: '5+hello',
+                10: '10+hello',
+                11: '11+world',
+                20: '20+world',
+                23: '23+hello',
+                28: '28+hello',
+                30: '30+hello',
+                50: '50+world',
+                60: '60+world',
+                66: '66+world',
+                68: '68+world',
+                90: '90+hello',
+                133: '133+hello'
             }
         }
         self.assertEqual(test_run, expected)
