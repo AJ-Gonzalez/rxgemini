@@ -3,6 +3,7 @@
 import functools
 import inspect
 import pathlib
+import sys
 
 import typer
 
@@ -44,7 +45,7 @@ def auto_injector(func):
                     # may add support for comma imports and import ()
                     if "," in line:
                         typer.echo("error")
-                        exit()
+                        sys.exit()
                     line = line.replace("from", "")
                     line = line.replace(lookup_val, "")
                     line = line.replace("import", "")
