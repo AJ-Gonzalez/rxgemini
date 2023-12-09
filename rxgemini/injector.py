@@ -11,7 +11,6 @@ from rxgemini.configurator import config_checker
 from rxgemini.log_handler import log_warning, log_info
 
 CONFIG = config_checker(internal=True)
-META_LABEL = CONFIG["META_LABEL"]
 
 
 def path_handler_for_tests():
@@ -58,7 +57,7 @@ def auto_injector(func):
         checker = path_handler_for_tests()
         log_info(f"Fetching from{ obj_path}")
         # metadata path will need refactoring to work on windows hosts
-        metadata = metadata_reader(f"{checker}/{lookup_val}{META_LABEL}.json")
+        metadata = metadata_reader(f"{checker}/{lookup_val}META.json")
         test_data = {
             "in": pickle_reader(metadata["IN"]),
             "out": pickle_reader(metadata["OUT"]),

@@ -9,7 +9,7 @@ from rxgemini.injector import (
 
 class TestInjector(unittest.TestCase):
     """
-    Tests methods/functions from rxgemini/fetcher.py
+    Tests methods/functions from rxgemini/injector.py
 
     Args:
         unittest (class): Inherits from TestCase
