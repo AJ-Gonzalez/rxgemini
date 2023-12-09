@@ -30,10 +30,10 @@ def pickle_reader(filename: str):
 
 
 def retrive_test_data(method_identifier: str):
-    log_info(f"Gathering data for {method_identifier}")
+    log_info(f"Gathering data for {method_identifier} tests")
     data_path = pathlib.Path().joinpath(SAVE_DIR, method_identifier)
     data_files = [f for f in data_path.glob(f"*{EXT}")]
-    print(data_files)
+    log_info(f"Found {data_files} data points.")
 
 
 # This is for next ticket, ignore for now
