@@ -1,6 +1,5 @@
 """Injection module for RX Gemini"""
 
-# TODO: refactor
 import functools
 import inspect
 import pathlib
@@ -26,6 +25,10 @@ def metadata_reader(filename: str):
 
 def pickle_reader(filename: str):
     log_info(filename)
+
+
+def retrive_test_data(method_identifier: str):
+    log_info(f"Gathering data for {method_identifier}")
 
 
 def auto_injector(func):
