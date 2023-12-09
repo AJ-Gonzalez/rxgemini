@@ -2,8 +2,32 @@
 
 import math
 import pickle
+from operator import itemgetter
 
 from rxgemini.log_handler import log_info
+
+
+# i know this computationally sucks, but is the cost of not
+# being able to manage numpy
+# dependencies within python versions,
+# and I still wanna support 3.7.4 bc enterprise.
+def percentile(in_ls: list, percentile_var: float) -> list:
+    """
+    Returns a list with the desired percentile set
+
+    Args:
+        in_ls (list): Input list
+        percentile_var (float): Percentile float
+
+    Returns:
+        list: percentile set
+    """
+    data_sorted = sorted(in_ls)  # Sort in ascending order
+    print(percentile_var)
+    index = math.ceil(percentile_var * len(data_sorted))
+    print(len(data_sorted), index)
+
+    return data_sorted[index]
 
 
 def index_finder(args_content: dict) -> int:
@@ -40,6 +64,9 @@ def index_finder(args_content: dict) -> int:
     Returns:
         int: complexity index
     """
+    if len(args_content) == 0:
+        # Low complexity index for no arg inputs
+        return 1
     indices = []
     for key, value in args_content.items():
         log_info(f"Evaluating complexity for: {key}")
@@ -55,3 +82,46 @@ def index_finder(args_content: dict) -> int:
     complexity_index = indices[exact_middle_index]
     log_info(f"Complexity index is: {complexity_index}")
     return complexity_index
+
+
+def instance_ranking(instances: list) -> dict:
+    """
+    Ranks func/method call data by complexity.
+
+    Returns the following statistics for that func/method:
+        Key:   |  Value:
+        "50th" : 50th percentile complexity
+        "high" : Maximum complexity
+        "low"  : Minimum complexity
+        "90th" : 90th percentile complexity
+        "10th" : 10th percentile complexity
+        "70th" : 70th percentile complexity
+        "30th" : 30th percentile complexity
+        "whole": All complexities
+        "raw"  : Dictionary mapping complexities to
+                 .gmni data files.
+
+
+    Args:
+        instances (list): list of call files
+
+    Returns:
+        dict: Statistics dict
+    """
+    rank_ls: list = [(int(file_str.split("+")[0]), file_str)
+                     for file_str in instances]
+    sorted_rankings = (sorted(rank_ls, key=itemgetter(0)))
+    rank_dict: dict = {int(elm[0]): elm[1] for elm in sorted_rankings}
+    deciles = [percentile(rank_dict, clx/10) for clx in range(0, 10)]
+    for idx, decile in enumerate(deciles):
+        print(idx, decile)
+    stats_dict = {"50th": percentile(rank_dict, 0.5),
+                  "high": max(rank_dict),
+                  "low": min(rank_dict),
+                  "90th": percentile(rank_dict, 0.9),
+                  "10th": percentile(rank_dict, 0.1),
+                  "70th": percentile(rank_dict, 0.7),
+                  "30th": percentile(rank_dict, 0.3),
+                  "whole": list(rank_dict),
+                  "raw": rank_dict}
+    return stats_dict

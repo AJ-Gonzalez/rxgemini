@@ -1,5 +1,7 @@
 """Module for libary-wide constants"""
 
+# Template for Instance Complexity Index
+ICI_TEMPLATE: str = "<ICI>_<timestamp>_<obj_name>"
 
 CFG_NAME: tuple = ("rxgemini_cfg.yaml", "rxgemini_cfg.yml")
 
@@ -11,14 +13,13 @@ CFG_TEMPLATE: dict = {
     # pretty: uses colorful typer messages
     # quiet: only shows prompts and essential info
     "LOG_MODE": "pretty",
-    "METADATA_SUFFIX": "-meta",
-    "INPUT_SUFFIX": "-input",
-    "OUTPUT_SUFFIX": "-output",
     "MARKER_KW": "RXGEMINI",
-    "TAGS": {"FETCHER": ["fetcher", "on", "off"]},
+    "TAGS": {
+        "FETCHER": ["fetcher", "on", "off"],
+        "DATA_MODE": ["datamode", "quick", "boundary", "full", "smart"]},
     "DELIMITERS": ["_about_", "_regarding_", "_evaluates_", "_ensures_"],
     "LOG_PREFIX": "[RX_GEMINI]",
-    "SAVE_DIRECTORY": "test_dc",
+    "SAVE_DIRECTORY": "test_dc"
 }
 
 

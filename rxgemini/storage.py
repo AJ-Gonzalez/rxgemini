@@ -10,6 +10,7 @@ from typing import Any
 from rxgemini.configurator import config_checker
 from rxgemini.constants import EXT
 from rxgemini.log_handler import log_info
+from rxgemini.cls_tools import index_finder
 
 CONFIG = config_checker(internal=True)
 
@@ -101,7 +102,9 @@ def store_instance(instance: LoggedInstance) -> str:
         str: Path where file was saved
     """
     t_stamp = str(timestamp()[1]).replace(".", "-")
-    f_name = f"{t_stamp}{instance.obj_name}{EXT}"
+    cmp_idx: int = index_finder(instance.call_contents)
+    f_name = f"{cmp_idx}+{t_stamp}{instance.obj_name}{EXT}"
+    print(f_name)
     save_path = pathlib.Path(*instance.file_path_parts, f_name)
     with open(save_path, "wb") as file_data:
         pickle.dump(instance, file_data)

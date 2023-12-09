@@ -53,7 +53,7 @@ def pretty_print(*items: Any):
     Pretty printer shourcut to standardize module use
 
     Args:
-        item (Any): item to pretty print_
+        item (Any): item to pretty print
     """
     pprint(*items)
 

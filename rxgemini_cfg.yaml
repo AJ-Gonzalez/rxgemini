@@ -4,14 +4,17 @@ DELIMITERS:
 - _evaluates_
 - _ensures_
 FORMALITY: 0
-INPUT_SUFFIX: -input
-LOG_MODE: python
+LOG_MODE: pretty
 LOG_PREFIX: '[RX_GEMINI]'
 MARKER_KW: RXGEMINI
-METADATA_SUFFIX: -meta
-OUTPUT_SUFFIX: -output
 SAVE_DIRECTORY: test_dc
 TAGS:
+  DATA_MODE:
+  - datamode
+  - quick
+  - boundary
+  - full
+  - smart
   FETCHER:
   - fetcher
   - 'on'
