@@ -10,8 +10,10 @@ import typer
 
 from rxgemini.configurator import config_checker
 from rxgemini.log_handler import log_warning, log_info
+from rxgemini.constants import EXT
 
 CONFIG = config_checker(internal=True)
+SAVE_DIR = CONFIG["SAVE_DIRECTORY"]
 
 
 def path_handler_for_tests():
@@ -29,8 +31,12 @@ def pickle_reader(filename: str):
 
 def retrive_test_data(method_identifier: str):
     log_info(f"Gathering data for {method_identifier}")
+    data_path = pathlib.Path().joinpath(SAVE_DIR, method_identifier)
+    data_files = [f for f in data_path.glob(f"*{EXT}")]
+    print(data_files)
 
 
+# This is for next ticket, ignore for now
 def auto_injector(func):
     @functools.wraps(func)
     def wrapper_injector(*args):
