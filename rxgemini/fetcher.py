@@ -24,6 +24,28 @@ SAVE_DIR = CONFIG["SAVE_DIRECTORY"]
 LOG_MODE = CONFIG["LOG_MODE"]
 
 
+def get_args_dict(
+        fn: callable,
+        args: list, kwargs: dict, is_method: bool = False) -> dict:
+    """
+    Fetches data values from function
+
+    Args:
+        fn (callable): _description_
+        args (list): _description_
+        kwargs (dict): _description_
+        is_method (bool, optional): _description_. Defaults to False.
+
+    Returns:
+        dict: _description_
+    """   
+    if is_method:
+        args_names = fn.__code__.co_varnames[1: fn.__code__.co_argcount]
+    else:
+        args_names = fn.__code__.co_varnames[: fn.__code__.co_argcount]
+    return {**dict(zip(args_names, args), **kwargs)}
+
+
 def call_data_handler(
         func: callable,
         args: list,
