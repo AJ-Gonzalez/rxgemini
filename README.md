@@ -1,5 +1,7 @@
 # RX Gemini
 
+**Abandoned for now**
+
 Python unit test automation toolkit. Generate real-world faithful unit tests with zero overhead.
 
 RX Gemini empowers developers, testers, and management to focus on features and code quality.
