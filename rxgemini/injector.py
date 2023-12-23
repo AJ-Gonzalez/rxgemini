@@ -1,19 +1,19 @@
 """Injection module for RX Gemini"""
 
-# pylint: skip-file
-# Skipping file because it has a pending refactor
 import functools
 import inspect
 import pathlib
+import sys
 
 import typer
 
 
 from rxgemini.configurator import config_checker
 from rxgemini.log_handler import log_warning, log_info
+from rxgemini.constants import EXT
 
 CONFIG = config_checker(internal=True)
-META_LABEL = CONFIG["META_LABEL"]
+SAVE_DIR = CONFIG["SAVE_DIRECTORY"]
 
 
 def path_handler_for_tests():
@@ -29,6 +29,14 @@ def pickle_reader(filename: str):
     log_info(filename)
 
 
+def retrive_test_data(method_identifier: str):
+    log_info(f"Gathering data for {method_identifier} tests")
+    data_path = pathlib.Path().joinpath(SAVE_DIR, method_identifier)
+    data_files = [f for f in data_path.glob(f"*{EXT}")]
+    log_info(f"Found {data_files} data points.")
+
+
+# This is for next ticket, ignore for now
 def auto_injector(func):
     @functools.wraps(func)
     def wrapper_injector(*args):
@@ -43,7 +51,7 @@ def auto_injector(func):
                     # may add support for comma imports and import ()
                     if "," in line:
                         typer.echo("error")
-                        exit()
+                        sys.exit()
                     line = line.replace("from", "")
                     line = line.replace(lookup_val, "")
                     line = line.replace("import", "")
@@ -56,7 +64,7 @@ def auto_injector(func):
         checker = path_handler_for_tests()
         log_info(f"Fetching from{ obj_path}")
         # metadata path will need refactoring to work on windows hosts
-        metadata = metadata_reader(f"{checker}/{lookup_val}{META_LABEL}.json")
+        metadata = metadata_reader(f"{checker}/{lookup_val}META.json")
         test_data = {
             "in": pickle_reader(metadata["IN"]),
             "out": pickle_reader(metadata["OUT"]),
